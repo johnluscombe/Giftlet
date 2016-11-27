@@ -13,7 +13,10 @@
           %span.icon-bar
           %span.icon-bar
           %span.icon-bar
-        = link_to 'Giftlet', users_path, class: 'navbar-brand'
+        - if current_user
+          = link_to 'Giftlet', users_path, class: 'navbar-brand'
+        - else
+          = link_to 'Giftlet', root_path, class: 'navbar-brand'
       = render 'layouts/navbar'
 
     .main.container-fluid
