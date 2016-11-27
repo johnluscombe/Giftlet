@@ -6,7 +6,7 @@ class GiftsController < ApplicationController
 
   def index
     @user = User.find(params[:user_id])
-    @gifts = @user.gifts
+    @gifts = @user.gifts.order(:name)
   end
 
   def new
