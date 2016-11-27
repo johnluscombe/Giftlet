@@ -14,6 +14,8 @@
     %tr
       %td.new_account= f.password_field :password, class: 'form-control', placeholder: 'Password', required: true
       %td.new_account= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirmation', required: true
+    %tr
+      %td.new_account{ colspan: '2' }= password_field_tag :site_passcode, nil, class: 'form-control', placeholder: 'Site Passcode', required: true
   %br
   = f.submit 'CREATE ACCOUNT', class: 'btn btn-success'
   = link_to 'CANCEL', root_path, class: 'btn btn-danger btn-outline'

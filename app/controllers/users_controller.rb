@@ -12,10 +12,12 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(safe_params)
-    if @user.save
-      redirect_to login_path
-    else
-      render 'new'
+    if check_site_passcode(params[:site_passcode])
+      if @user.save
+        redirect_to login_path
+      else
+        render 'new'
+      end
     end
   end
 
@@ -29,15 +31,19 @@ class UsersController < ApplicationController
     if current_user.update(safe_params)
       redirect_to edit_basic_information_path
     else
+      flash.now[:danger] = 'There was an error saving'
       render 'edit_basic_information'
     end
   end
 
   def update_password
-    check_passwords(BCrypt::Password.new(current_user.password_digest), params[:old_password])
-    if current_user.update(safe_params)
-      redirect_to edit_password_path
+    old_password_correct = check_passwords(BCrypt::Password.new(current_user.password_digest), params[:old_password])
+    if current_user.update(safe_params) and old_password_correct
+      redirect_to users_path
     else
+      if old_password_correct
+        flash.now[:danger] = 'New password does not match confirmation'
+      end
       render 'edit_password'
     end
   end
@@ -62,9 +68,21 @@ class UsersController < ApplicationController
   end
 
   def check_passwords(password_one, password_two)
-    unless password_one == password_two
-      flash[:danger] = 'Old password is incorrect'
-      render 'edit_password'
+    if password_one != password_two
+      flash.now[:danger] = 'Old password is incorrect'
+      false
+    else
+      true
+    end
+  end
+
+  def check_site_passcode(passcode)
+    if passcode != ENV['SITE_PASSCODE']
+      flash.now[:danger] = 'Invalid site passcode'
+      render 'new'
+      false
+    else
+      true
     end
   end
 end
