@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124183820) do
+ActiveRecord::Schema.define(version: 20161127043202) do
 
   create_table "gifts", force: :cascade do |t|
     t.string  "name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20161124183820) do
     t.boolean "purchased"
     t.date    "date_purchased"
     t.integer "user_id"
+    t.integer "purchaser_id"
   end
 
   create_table "users", force: :cascade do |t|

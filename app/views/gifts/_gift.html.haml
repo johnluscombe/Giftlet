@@ -15,16 +15,28 @@
 
   - if @user != current_user
     - if gift.purchased
-      %td
-        = form_for gift, url: gift_path(gift), method: :patch do |form|
-          = form.hidden_field :purchased, value: false
-          = button_tag(type: 'submit', class: 'btn btn-success') do
-            %i.glyphicon.glyphicon-ok
-            Purchased
+      - if gift.purchaser_id == current_user.id
+        %td
+          = form_for gift, url: gift_path(gift), method: :patch do |form|
+            = form.hidden_field :purchased, value: false
+            = form.hidden_field :purchaser_id, value: nil
+            = button_tag(type: 'submit', class: 'btn btn-success') do
+              %i.glyphicon.glyphicon-ok
+              Purchased by You
+      - elsif gift.purchaser_id
+        %td.text-success.text-nowrap
+          %i.glyphicon.glyphicon-ok
+          Purchased by #{ gift.purchaser.first_name } #{ gift.purchaser.last_name }
+      - else
+        %td.text-success
+          %i.glyphicon.glyphicon-ok
+          Purchased
+
     - else
       %td
         = form_for gift, url: gift_path(gift), method: :patch do |form|
           = form.hidden_field :purchased, value: true
+          = form.hidden_field :purchaser_id, value: current_user.id
           = form.submit 'Mark as Purchased', class: 'btn btn-default'
 
   - else

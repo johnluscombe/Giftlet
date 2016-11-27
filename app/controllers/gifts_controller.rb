@@ -49,7 +49,7 @@ class GiftsController < ApplicationController
   private
 
   def safe_params
-    params.require(:gift).permit(:name, :description, :url, :price_as_dollars, :purchased, :date_purchased)
+    params.require(:gift).permit(:name, :description, :url, :price_as_dollars, :purchased, :date_purchased, :purchaser_id)
   end
 
   def ensure_user_logged_in

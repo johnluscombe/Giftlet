@@ -24,4 +24,12 @@ class Gift < ActiveRecord::Base
     self.price = value
     self.save
   end
+
+  def purchaser
+    User.find(self.purchaser_id)
+  end
+
+  def purchaser=(user)
+    self.purchaser_id = user.id
+  end
 end
