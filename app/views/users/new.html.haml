@@ -1,0 +1,19 @@
+%h1 New User
+%br
+= render 'shared/errors', object: @user
+
+= form_for @user do |f|
+  %table
+    %col{ width: '200' }
+    %col{ width: '200' }
+    %tr
+      %td.new_account= f.text_field :first_name, class: 'form-control', placeholder: 'First Name', required: true
+      %td.new_account= f.text_field :last_name, class: 'form-control', placeholder: 'Last Name', required: true
+    %tr
+      %td.new_account{ colspan: '2' }= f.text_field :username, class: 'form-control', placeholder: 'Username', required: true
+    %tr
+      %td.new_account= f.password_field :password, class: 'form-control', placeholder: 'Password', required: true
+      %td.new_account= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirmation', required: true
+  %br
+  = f.submit 'CREATE ACCOUNT', class: 'btn btn-success'
+  = link_to 'CANCEL', root_path, class: 'btn btn-danger btn-outline'

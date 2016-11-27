@@ -1,0 +1,13 @@
+%table
+  %col{ width: '400' }
+  %tr
+    %td.new_account= f.text_field :name, class: 'form-control', placeholder: 'Name', required: true
+  %tr
+    %td.new_account
+      .input-group
+        %span.input-group-addon $
+        = f.text_field :price_as_dollars, class: 'form-control', placeholder: 'Price'
+  %tr
+    %td.new_account= f.text_area :description, class: 'form-control', placeholder: 'Description'
+  %tr
+    %td.new_account= f.text_area :url, class: 'form-control', placeholder: 'URL'

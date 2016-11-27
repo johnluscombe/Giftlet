@@ -1,0 +1,9 @@
+%h1 New Gift
+%br
+= render 'shared/errors', object: @gift
+
+= form_for [@user, @gift] do |form|
+  = render partial: 'fields', locals: { f: form }
+  %br
+  = form.submit 'SUBMIT', class: 'btn btn-success'
+  = link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-danger'

@@ -1,0 +1,29 @@
+!!!
+%html
+  %head
+    %title Giftlet
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': true
+    = javascript_include_tag 'application', 'data-turbolinks-track': true
+    = csrf_meta_tags
+  %body
+    %nav.navbar.navbar-default
+      .navbar-header
+        %button.navbar-toggle.collapsed{ type: 'button', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1' }
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        = link_to 'Giftlet', users_path, class: 'navbar-brand'
+      = render 'layouts/navbar'
+
+    .main.container-fluid
+      - if flash.count > 0
+        .panel.panel-danger
+          .panel-body.error-div
+            %table
+              - flash.each do |message|
+                %tr
+                  %td
+                    %span.glyphicon.glyphicon-remove
+                    = message[1]
+      = yield

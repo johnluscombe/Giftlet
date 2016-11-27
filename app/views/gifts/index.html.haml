@@ -1,0 +1,25 @@
+- if @user == current_user
+  %h1 Your Gifts
+- else
+  %h1 #{@user.first_name}'s Gifts
+
+%br
+- if @gifts.count > 0
+  - if @user == current_user
+    %table.table
+      %col{ width: '98%' }
+      %col{ width: '1%' }
+      %col{ width: '1%' }
+      = render @gifts
+  - else
+    %table.table
+      %col{ width: '89%' }
+      %col{ width: '10%' }
+      %col{ width: '1%' }
+      = render @gifts
+- elsif @user == current_user
+  %p You have not added any gifts yet!
+- else
+  %p #{@user.first_name} has not added any gifts yet!
+- if @user == current_user
+  = link_to 'ADD NEW GIFT', new_user_gift_path(@user), class: 'btn btn-success'
