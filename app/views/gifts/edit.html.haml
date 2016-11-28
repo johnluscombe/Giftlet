@@ -6,7 +6,7 @@
   = render partial: 'fields', locals: { f: form }
   %br
   = form.submit 'UPDATE GIFT', class: 'btn btn-success'
-  = link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-danger'
+  = link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-outline-danger'
   = link_to gift_path(@gift), method: :delete, class: 'delete-gift' do
-    %i.glyphicon.glyphicon-trash
+    %i.fa.fa-trash-o
     DELETE GIFT

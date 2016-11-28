@@ -10,12 +10,14 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
- *= require_self
  */
-@import "bootstrap-sprockets";
 @import "bootstrap";
-@import "bootstrap/theme";
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+a#navbar-dropdown {
+  color: white;
+}
 
 .delete-gift,
 .delete-gift:hover {
@@ -27,20 +29,35 @@
   color: #A94442;
 }
 
-.input-group {
-  width: 100%;
-}
-
-.glyphicon-cog, .glyphicon-trash {
+.fa-cog, .fa-trash-o {
   color: gray;
 }
 
-.glyphicon-trash {
+.fa-trash-o {
   margin-left: 10px;
+}
+
+.gift-field {
+  margin-bottom: 10px;
+  width: 400px;
 }
 
 .hand-icon {
   cursor: pointer;
+}
+
+input#username, input#password {
+  display: inline;
+  width: 250px;
+}
+
+.navbar {
+  border-radius: 0;
+  margin-bottom: 50px;
+}
+
+.navbar-text {
+  color: white;
 }
 
 td.new_account {

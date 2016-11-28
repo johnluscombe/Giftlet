@@ -6,27 +6,17 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': true
     = csrf_meta_tags
   %body
-    %nav.navbar.navbar-default
-      .navbar-header
-        %button.navbar-toggle.collapsed{ type: 'button', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1' }
-          %span.sr-only Toggle navigation
-          %span.icon-bar
-          %span.icon-bar
-          %span.icon-bar
-        - if current_user
-          = link_to 'Giftlet', users_path, class: 'navbar-brand'
-        - else
-          = link_to 'Giftlet', root_path, class: 'navbar-brand'
+    %nav.navbar.navbar-dark.bg-primary
+      - if current_user
+        = link_to 'Giftlet', users_path, class: 'navbar-brand'
+      - else
+        = link_to 'Giftlet', root_path, class: 'navbar-brand'
       = render 'layouts/navbar'
 
     .main.container-fluid
-      - if flash.count > 0
-        .panel.panel-danger
-          .panel-body.error-div
-            %table
-              - flash.each do |message|
-                %tr
-                  %td
-                    %span.glyphicon.glyphicon-remove
-                    = message[1]
+      - flash.each do |type, message|
+        %div{ class: "alert alert-#{type} alert-dismissible fade in", role: 'alert' }
+          %button.close{ type: 'button', 'data-dismiss': 'alert', 'aria-label': 'Close' }
+            %span{ 'aria-hidden': 'true' } &times;
+          = message
       = yield

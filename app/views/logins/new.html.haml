@@ -1,12 +1,12 @@
-%h1.text-center Log In
+%h1.text-xs-center Log In
 %br
 %br
 
-= form_tag logins_path, class: 'text-center' do
-  %p= text_field_tag :username, params[:username], class: 'form-control username', placeholder: 'Username'
-  %p= password_field_tag :password, params[:password], class: 'form-control password', placeholder: 'Password'
-  = submit_tag 'Log In', class: 'btn btn-default'
+= form_tag logins_path, class: 'text-xs-center' do
+  %p= text_field_tag :username, params[:username], class: 'form-control', placeholder: 'Username'
+  %p= password_field_tag :password, params[:password], class: 'form-control', placeholder: 'Password'
+  = submit_tag 'Log In', class: 'btn btn-secondary'
 
 %br
-%form.text-center
-  = link_to 'Create New Account', new_user_path, class: 'btn btn-default text-center'
+%form.text-xs-center
+  = link_to 'Create New Account', new_user_path, class: 'btn btn-secondary text-xs-center'

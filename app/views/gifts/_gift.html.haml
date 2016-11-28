@@ -9,7 +9,7 @@
       = gift.description
 
   - if !gift.price.blank?
-    %td.text-right= number_to_currency(gift.price)
+    %td.text-xs-right= number_to_currency(gift.price)
   - else
     %td
 
@@ -21,15 +21,15 @@
             = form.hidden_field :purchased, value: false
             = form.hidden_field :purchaser_id, value: nil
             = button_tag(type: 'submit', class: 'btn btn-success') do
-              %i.glyphicon.glyphicon-ok
+              %i.fa.fa-check
               Purchased by You
       - elsif gift.purchaser_id
         %td.text-success.text-nowrap
-          %i.glyphicon.glyphicon-ok
+          %i.fa.fa-check
           Purchased by #{ gift.purchaser.first_name } #{ gift.purchaser.last_name }
       - else
         %td.text-success
-          %i.glyphicon.glyphicon-ok
+          %i.fa.fa-check
           Purchased
 
     - else
@@ -40,6 +40,6 @@
           = form.submit 'Mark as Purchased', class: 'btn btn-default'
 
   - else
-    %td.text-right
+    %td.text-xs-right
       = link_to edit_gift_path(gift) do
-        %i.glyphicon.glyphicon-cog
+        %i.fa.fa-cog{ 'aria-hidden': 'true' }

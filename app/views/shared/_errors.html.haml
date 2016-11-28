@@ -1,13 +1,5 @@
 - if object.errors.any?
-  .panel.panel-danger
-    .panel-body.error-div
-      - if object.errors.full_messages.count == 1
-        %span.glyphicon.glyphicon-remove
-        = object.errors.full_messages[0]
-      - else
-        %table
-          - object.errors.full_messages.each do |message|
-            %tr
-              %td
-                %span.glyphicon.glyphicon-remove
-                = message + "\n"
+  - error_message = ''
+  - object.errors.full_messages.each do |message|
+    - error_message += message + "\n"
+  - flash.now[:danger] = error_message

@@ -1,13 +1,6 @@
-%table
-  %col{ width: '400' }
-  %tr
-    %td.new_account= f.text_field :name, class: 'form-control', placeholder: 'Name', required: true
-  %tr
-    %td.new_account
-      .input-group
-        %span.input-group-addon $
-        = f.text_field :price_as_dollars, class: 'form-control', placeholder: 'Price'
-  %tr
-    %td.new_account= f.text_area :description, class: 'form-control', placeholder: 'Description'
-  %tr
-    %td.new_account= f.text_area :url, class: 'form-control', placeholder: 'URL'
+= f.text_field :name, class: 'form-control gift-field', placeholder: 'Name', required: true
+.input-group.gift-field
+  .input-group-addon $
+  = f.text_field :price_as_dollars, class: 'form-control', placeholder: 'Price'
+= f.text_area :description, class: 'form-control gift-field', placeholder: 'Description'
+= f.text_area :url, class: 'form-control gift-field', placeholder: 'URL'

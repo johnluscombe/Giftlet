@@ -1,32 +1,26 @@
-.collapse.navbar-collapse#bs-example-navbar-collapse-1
-  %ul.nav.navbar-nav.navbar-right
-    - if current_user
-      %li.dropdown
-        %a.dropdown-toggle{ href: '#', 'data-toggle': 'dropdown', role: 'button' }
-          = current_user.fullname
-          %span.caret
-        %ul.dropdown-menu
-          %li
-            = link_to user_gifts_path(current_user) do
-              %i.glyphicon.glyphicon-th-list
-              &nbsp;
-              View Your Gifts
-          %li.divider{ role: 'separator' }
-          %li
-            = link_to edit_basic_information_path do
-              %i.glyphicon.glyphicon-user
-              &nbsp;
-              Edit Basic Information
-          %li
-            = link_to edit_password_path do
-              %i.glyphicon.glyphicon-lock
-              &nbsp;
-              Change Password
-          %li.divider{ role: 'separator' }
-          %li
-            = link_to logout_path, method: :delete do
-              %i.glyphicon.glyphicon-log-in
-              &nbsp;
-              Log Out
-    - else
-      %p.navbar-text You are not logged in.
+%ul.nav.navbar-nav
+  - if current_user
+    %li.nav-item.dropdown.float-xs-right
+      %a.nav-link.dropdown-toggle{ href: '#', id: 'navbar-dropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' }
+        = current_user.fullname
+      .dropdown-menu.dropdown-menu-right{ 'aria-labelledby': 'navbar-dropdown' }
+        = link_to user_gifts_path(current_user), class: 'dropdown-item' do
+          %i.fa.fa-list
+          &nbsp;
+          View Your Gifts
+        .dropdown-divider
+        = link_to edit_basic_information_path, class: 'dropdown-item' do
+          %i.fa.fa-user
+          &nbsp;
+          Edit Basic Information
+        = link_to edit_password_path, class: 'dropdown-item' do
+          %i.fa.fa-lock
+          &nbsp;
+          Change Password
+        .dropdown-divider
+        = link_to logout_path, class: 'dropdown-item', method: :delete do
+          %i.fa.fa-sign-in
+          &nbsp;
+          Log Out
+  - else
+    %span.navbar-text.float-xs-right You are not logged in.
