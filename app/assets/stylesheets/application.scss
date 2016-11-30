@@ -19,6 +19,11 @@ a#navbar-dropdown {
   color: white;
 }
 
+a.nav-link.dropdown-toggle {
+  font-family: 'Raleway-SemiBold', Helvetica, Arial, sans-serif;
+  font-size: 0.8em;
+}
+
 .delete-gift,
 .delete-gift:hover {
   color: gray;
@@ -51,9 +56,18 @@ input#username, input#password {
   width: 250px;
 }
 
+.nav-item, .navbar-text {
+  line-height: 28px;
+}
+
 .navbar {
   border-radius: 0;
   margin-bottom: 50px;
+}
+
+.navbar-brand {
+  font-family: 'Raleway-Bold', Helvetica, Arial, sans-serif;
+  font-size: 1.5em;
 }
 
 .navbar-text {
@@ -64,6 +78,25 @@ td.new_account {
   padding-bottom: 5px;
   padding-right: 10px;
   padding-top: 5px;
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('/assets/Raleway-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Raleway-SemiBold';
+  src: url('/assets/Raleway-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Raleway-Bold';
+  src: url('/assets/Raleway-Bold.ttf') format('truetype');
+}
+
+body {
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
 }
 
 @media (min-width: 1200px) {

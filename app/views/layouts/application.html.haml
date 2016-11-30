@@ -6,12 +6,7 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': true
     = csrf_meta_tags
   %body
-    %nav.navbar.navbar-dark.bg-primary
-      - if current_user
-        = link_to 'Giftlet', users_path, class: 'navbar-brand'
-      - else
-        = link_to 'Giftlet', root_path, class: 'navbar-brand'
-      = render 'layouts/navbar'
+    = render 'layouts/navbar'
 
     .main.container-fluid
       - flash.each do |type, message|

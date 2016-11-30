@@ -1,26 +1,29 @@
-%ul.nav.navbar-nav
+%nav.navbar.navbar-dark.bg-primary
   - if current_user
-    %li.nav-item.dropdown.float-xs-right
-      %a.nav-link.dropdown-toggle{ href: '#', id: 'navbar-dropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' }
-        = current_user.fullname
-      .dropdown-menu.dropdown-menu-right{ 'aria-labelledby': 'navbar-dropdown' }
-        = link_to user_gifts_path(current_user), class: 'dropdown-item' do
-          %i.fa.fa-list
-          &nbsp;
-          View Your Gifts
-        .dropdown-divider
-        = link_to edit_basic_information_path, class: 'dropdown-item' do
-          %i.fa.fa-user
-          &nbsp;
-          Edit Basic Information
-        = link_to edit_password_path, class: 'dropdown-item' do
-          %i.fa.fa-lock
-          &nbsp;
-          Change Password
-        .dropdown-divider
-        = link_to logout_path, class: 'dropdown-item', method: :delete do
-          %i.fa.fa-sign-in
-          &nbsp;
-          Log Out
+    = link_to 'Giftlet', users_path, class: 'navbar-brand'
+    %ul.nav.navbar-nav
+      %li.nav-item.dropdown.float-xs-right
+        %a.nav-link.dropdown-toggle{ href: '#', id: 'navbar-dropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' }
+          = current_user.fullname
+        .dropdown-menu.dropdown-menu-right{ 'aria-labelledby': 'navbar-dropdown' }
+          = link_to user_gifts_path(current_user), class: 'dropdown-item' do
+            %i.fa.fa-list
+            &nbsp;
+            View Your Gifts
+          .dropdown-divider
+          = link_to edit_basic_information_path, class: 'dropdown-item' do
+            %i.fa.fa-user
+            &nbsp;
+            Edit Basic Information
+          = link_to edit_password_path, class: 'dropdown-item' do
+            %i.fa.fa-lock
+            &nbsp;
+            Change Password
+          .dropdown-divider
+          = link_to logout_path, class: 'dropdown-item', method: :delete do
+            %i.fa.fa-sign-in
+            &nbsp;
+            Log Out
   - else
+    = link_to 'Giftlet', root_path, class: 'navbar-brand'
     %span.navbar-text.float-xs-right You are not logged in.

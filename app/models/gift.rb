@@ -2,7 +2,7 @@ class Gift < ActiveRecord::Base
   belongs_to :user, inverse_of: :gifts
 
   validates :name, presence: true
-  validates :price, numericality: true
+  validates :price, numericality: true, allow_nil: true
 
   def full_url
     if self.url[0..6] == 'http://' or self.url[0..7] == 'https://'
