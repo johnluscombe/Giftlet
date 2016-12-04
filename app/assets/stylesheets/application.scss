@@ -126,17 +126,17 @@ td.new_account {
 
 @font-face {
   font-family: 'Raleway';
-  src: url('Raleway-Regular.ttf') format('truetype');
+  src: font-url('Raleway-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Raleway-SemiBold';
-  src: url('Raleway-SemiBold.ttf') format('truetype');
+  src: font-url('Raleway-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Raleway-Bold';
-  src: url('Raleway-Bold.ttf') format('truetype');
+  src: font-url('Raleway-Bold.ttf') format('truetype');
 }
 
 body {
