@@ -16,7 +16,7 @@
   - if @user != current_user
     - if gift.purchased
       - if gift.purchaser_id == current_user.id
-        %td
+        %td.text-xs-right
           = form_for gift, url: gift_path(gift), method: :patch do |form|
             = form.hidden_field :purchased, value: false
             = form.hidden_field :purchaser_id, value: nil
@@ -24,11 +24,11 @@
               %i.fa.fa-check
               Purchased by You
       - elsif gift.purchaser_id
-        %td.text-success.text-nowrap
+        %td.text-success.text-nowrap.text-xs-right
           %i.fa.fa-check
           Purchased by #{ gift.purchaser.first_name } #{ gift.purchaser.last_name }
       - else
-        %td.text-success
+        %td.text-success.text-xs-right
           %i.fa.fa-check
           Purchased
 
