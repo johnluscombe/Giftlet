@@ -33,7 +33,7 @@
           Purchased
 
     - else
-      %td
+      %td.text-xs-right
         = form_for gift, url: gift_path(gift), method: :patch do |form|
           = form.hidden_field :purchased, value: true
           = form.hidden_field :purchaser_id, value: current_user.id
