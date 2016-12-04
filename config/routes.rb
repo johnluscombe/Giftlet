@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   get 'edit_password', to: 'users#edit_password'
   patch 'update_basic_information', to: 'users#update_basic_information'
   patch 'update_password', to: 'users#update_password'
+
+  get 'about', to: 'about#index'
 end

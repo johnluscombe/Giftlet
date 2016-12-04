@@ -1,6 +1,8 @@
 %nav.navbar.navbar-dark.bg-primary
   - if current_user
     = link_to 'Giftlet', users_path, class: 'navbar-brand'
+    %span.navbar-text.beta-tag.float-xs-left
+      BETA
     %ul.nav.navbar-nav
       %li.nav-item.dropdown.float-xs-right
         %a.nav-link.dropdown-toggle{ href: '#', id: 'navbar-dropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' }
@@ -20,10 +22,17 @@
             &nbsp;
             Change Password
           .dropdown-divider
+          = link_to about_path, class: 'dropdown-item' do
+            %i.fa.fa-info-circle
+            &nbsp;
+            About Giftlet
+          .dropdown-divider
           = link_to logout_path, class: 'dropdown-item', method: :delete do
             %i.fa.fa-sign-in
             &nbsp;
             Log Out
   - else
     = link_to 'Giftlet', root_path, class: 'navbar-brand'
+    %span.navbar-text.beta-tag.float-xs-left
+      BETA
     %span.navbar-text.float-xs-right You are not logged in.

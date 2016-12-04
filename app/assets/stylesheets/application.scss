@@ -24,6 +24,45 @@ a.nav-link.dropdown-toggle {
   font-size: 0.8em;
 }
 
+.beta-tag.navbar-text {
+  background-color: darkorange;
+  border-radius: 5px;
+  font-size: 0.7em;
+  line-height: 20px;
+  margin-bottom: 10.8px;
+  margin-top: 10.8px;
+  padding: 0 4px;
+}
+
+.beta-tag-about.navbar-text {
+  background-color: darkorange;
+  border-radius: 5px;
+  font-size: 0.7em;
+  line-height: 20px;
+  margin-bottom: 4px;
+  margin-left: 10px;
+  margin-top: 4px;
+  overflow: auto;
+  padding: 0 4px;
+}
+
+.brand {
+  display: inline;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.btn-outline-danger {
+  background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+  background-color: transparent;
+  color: #d9534f;
+}
+
 .delete-gift,
 .delete-gift:hover {
   color: gray;
@@ -72,6 +111,11 @@ input#username, input#password {
 
 .navbar-text {
   color: white;
+}
+
+.version {
+  color: gray;
+  margin-bottom: 0;
 }
 
 td.new_account {
