@@ -11,4 +11,12 @@ class User < ActiveRecord::Base
   def fullname
     self.first_name + ' ' + self.last_name
   end
+
+  def unpurchased_gifts
+    self.gifts.where(purchased: [false, nil])
+  end
+
+  def amount_spent_on(recipient)
+    recipient.gifts.where(purchaser_id: self.id).sum(:price)
+  end
 end

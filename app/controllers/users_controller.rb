@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   end
 
   def new
+    ensure_passcode_exists
     @user = User.new
   end
 
@@ -14,6 +15,7 @@ class UsersController < ApplicationController
     @user = User.new(safe_params)
     if check_site_passcode(params[:site_passcode])
       if @user.save
+        flash[:success] = 'Account successfully created'
         redirect_to login_path
       else
         render 'new'
@@ -83,6 +85,13 @@ class UsersController < ApplicationController
       false
     else
       true
+    end
+  end
+
+  def ensure_passcode_exists
+    if ENV['SITE_PASSCODE'].blank?
+      flash[:danger] = 'Site passcode not configured, please contact your administrator'
+      redirect_to :back
     end
   end
 end
