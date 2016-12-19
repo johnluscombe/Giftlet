@@ -3,3 +3,6 @@
   %td.text-xs-center.hand-icon{ onclick: "redirectTo('#{ user_gifts_url(user) }')" }
     %strong= number_to_currency(current_user.amount_spent_on(user))
     %p.small-text SPENT
+  %td.text-xs-center.hand-icon{ onclick: "redirectTo('#{ user_gifts_url(user) }')" }
+    %strong= user.unpurchased_gifts.count
+    %p.small-text UNPURCHASED

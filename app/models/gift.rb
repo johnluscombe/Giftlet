@@ -4,6 +4,8 @@ class Gift < ActiveRecord::Base
   validates :name, presence: true
   validates :price, numericality: true, allow_nil: true
 
+  before_save :change_zero_price_to_nil
+
   def full_url
     if self.url[0..6] == 'http://' or self.url[0..7] == 'https://'
       self.url
@@ -31,5 +33,11 @@ class Gift < ActiveRecord::Base
 
   def purchaser=(user)
     self.purchaser_id = user.id
+  end
+
+  def change_zero_price_to_nil
+    if self.price == 0.0
+      self.price = nil
+    end
   end
 end

@@ -8,7 +8,7 @@
       %br
       = gift.description
 
-  - if !gift.price.blank?
+  - if !gift.price.blank? and gift.price != 0.0
     %td.text-xs-right= number_to_currency(gift.price)
   - else
     %td
