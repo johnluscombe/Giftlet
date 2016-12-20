@@ -2,7 +2,7 @@ class GiftsController < ApplicationController
   before_filter :ensure_user_logged_in
   before_filter :ensure_user_exists, only: [:index, :new]
   before_filter :ensure_gift_exists, only: :edit
-  before_filter :ensure_correct_user, except: [:index, :update]
+  before_filter :ensure_correct_user, except: [:index]
 
   def index
     @user = User.find(params[:user_id])

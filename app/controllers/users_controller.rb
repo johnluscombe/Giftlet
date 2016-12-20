@@ -1,13 +1,13 @@
 class UsersController < ApplicationController
   before_filter :ensure_user_logged_in, except: [:new, :create]
   before_filter :ensure_user_not_logged_in, only: [:new, :create]
+  before_filter :ensure_passcode_exists, only: [:new, :create]
 
   def index
     @users = User.where.not(id: current_user.id)
   end
 
   def new
-    ensure_passcode_exists
     @user = User.new
   end
 
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     @user = User.new(safe_params)
     if check_site_passcode(params[:site_passcode])
       if @user.save
-        flash[:success] = 'Account successfully created'
+        flash[:success] = 'Account created'
         redirect_to login_path
       else
         render 'new'
@@ -40,13 +40,16 @@ class UsersController < ApplicationController
 
   def update_password
     old_password_correct = check_passwords(BCrypt::Password.new(current_user.password_digest), params[:old_password])
-    if current_user.update(safe_params) and old_password_correct
-      redirect_to users_path
-    else
-      if old_password_correct
-        flash.now[:danger] = 'New password does not match confirmation'
+    if old_password_correct
+      if current_user.update(safe_params)
+        flash[:success] = 'Password updated'
+        redirect_to users_path
+      else
+        flash[:danger] = 'Password and confirmation do not match'
+        redirect_to edit_password_path
       end
-      render 'edit_password'
+    else
+      redirect_to edit_password_path
     end
   end
 
@@ -71,7 +74,7 @@ class UsersController < ApplicationController
 
   def check_passwords(password_one, password_two)
     if password_one != password_two
-      flash.now[:danger] = 'Old password is incorrect'
+      flash[:danger] = 'Old password is incorrect'
       false
     else
       true
@@ -82,16 +85,14 @@ class UsersController < ApplicationController
     if passcode != ENV['SITE_PASSCODE']
       flash.now[:danger] = 'Invalid site passcode'
       render 'new'
-      false
-    else
-      true
     end
+    passcode == ENV['SITE_PASSCODE']
   end
 
   def ensure_passcode_exists
     if ENV['SITE_PASSCODE'].blank?
       flash[:danger] = 'Site passcode not configured, please contact your administrator'
-      redirect_to :back
+      redirect_to login_path
     end
   end
 end

@@ -9,11 +9,7 @@ class LoginsController < ApplicationController
     user = User.find_by(username: params[:username])
     if user and user.authenticate(params[:password])
       session[:user_id] = user.id
-      if user.first_time
-        redirect_to edit_user_path(user)
-      else
-        redirect_to users_path
-      end
+      redirect_to users_path
     else
       flash.now[:danger] = 'Invalid username or password'
       render 'new'

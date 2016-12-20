@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   has_many :gifts, inverse_of: :user
 
+  before_destroy { self.gifts.destroy_all }
+
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :username, presence: true, uniqueness: true

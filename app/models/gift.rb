@@ -1,6 +1,7 @@
 class Gift < ActiveRecord::Base
   belongs_to :user, inverse_of: :gifts
 
+  validates :user, presence: true
   validates :name, presence: true
   validates :price, numericality: true, allow_nil: true
 
