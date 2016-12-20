@@ -8,6 +8,6 @@ module LoginsHelper
   end
 
   def logged_in?
-    session[:user_id]
+    !session[:user_id].nil?
   end
 end
