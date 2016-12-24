@@ -51,6 +51,14 @@ describe Gift do
     it { should be_valid }
   end
 
+  describe 'with zero price' do
+    let(:free_gift) { FactoryGirl.create(:free_gift) }
+
+    it 'converts price to nil' do
+      expect(free_gift.price).to be(nil)
+    end
+  end
+
   describe 'accepts blank date purchased' do
     before { gift.date_purchased = '' }
 

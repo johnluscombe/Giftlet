@@ -11,6 +11,10 @@ FactoryGirl.define do
     user
     sequence(:name) { |i| "Gift #{i}" }
 
+    factory :free_gift do
+      price 0.0
+    end
+
     factory :gift_with_price do
       price 1.0
     end

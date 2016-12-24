@@ -25,6 +25,10 @@ describe 'User Pages' do
     describe 'when logged in' do
       before { login user }
 
+      it 'allows access' do
+        should have_current_path(users_path)
+      end
+
       it 'lists the other recipients' do
         User.where.not(id: user.id).each do |other_user|
           within(:css, 'table') do
@@ -405,9 +409,7 @@ describe 'User Pages' do
       end
 
       describe 'clicking cancel' do
-        before do
-          fill_in 'user_username', with: 'newusername'
-        end
+        before { fill_in 'user_username', with: 'newusername' }
 
         it 'does not change the data' do
           click_link cancel
