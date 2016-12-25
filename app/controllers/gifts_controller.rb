@@ -1,17 +1,16 @@
 class GiftsController < ApplicationController
   before_filter :ensure_user_logged_in
-  before_filter :ensure_user_exists, only: [:index, :new]
-  before_filter :ensure_gift_exists, only: :edit
+  before_filter :ensure_user_exists, only: [:index]
   before_filter :ensure_correct_user, except: [:index]
 
   def index
     @user = User.find(params[:user_id])
     @gifts = @user.gifts.order(:name)
-  end
-
-  def new
-    @user = User.find(params[:user_id])
-    @gift = @user.gifts.build
+    if params[:render_new]
+      @gift = @user.gifts.build
+    elsif params[:render_edit]
+      @gift = Gift.find(params[:render_edit])
+    end
   end
 
   def create
@@ -20,13 +19,8 @@ class GiftsController < ApplicationController
     if @gift.save
       redirect_to user_gifts_path(@user)
     else
-      render 'new'
+      render 'index'
     end
-  end
-
-  def edit
-    @gift = Gift.find(params[:id])
-    @user = @gift.user
   end
 
   def update
@@ -35,7 +29,7 @@ class GiftsController < ApplicationController
     if @gift.update(safe_params)
       redirect_to user_gifts_path(@user)
     else
-      render 'edit'
+      render 'index'
     end
   end
 

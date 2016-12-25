@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root 'logins#new'
 
   resources :users, only: [:index, :new, :create], shallow: true do
-    resources :gifts
+    resources :gifts, except: :new
   end
 
   resources :gifts

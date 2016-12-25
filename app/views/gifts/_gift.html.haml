@@ -1,45 +1,48 @@
-%tr[gift]
-  %td
-    - unless gift.url.blank?
-      = link_to gift.name, gift.full_url
-    - else
-      = gift.name
-    - unless gift.description.blank?
-      %br
-      = gift.description
-
-  - if !gift.price.blank? and gift.price != 0.0
-    %td.text-xs-right= number_to_currency(gift.price)
-  - else
+- if params[:render_edit].to_i == gift.id
+  = render partial: 'fields', locals: { f: f }
+- else
+  %tr[gift]
     %td
+      - unless gift.url.blank?
+        = link_to gift.name, gift.full_url
+      - else
+        = gift.name
+      - unless gift.description.blank?
+        %br
+        = gift.description
 
-  - if @user != current_user
-    - if gift.purchased
-      - if gift.purchaser_id == current_user.id
+    - if !gift.price.blank? and gift.price != 0.0
+      %td.text-xs-right= number_to_currency(gift.price)
+    - else
+      %td
+
+    - if @user != current_user
+      - if gift.purchased
+        - if gift.purchaser_id == current_user.id
+          %td.text-xs-right
+            = form_for gift, url: gift_path(gift), method: :patch do |form|
+              = form.hidden_field :purchased, value: false
+              = form.hidden_field :purchaser_id, value: nil
+              = button_tag(type: 'submit', class: 'btn btn-success') do
+                %i.fa.fa-check
+                Purchased by You
+        - elsif gift.purchaser_id
+          %td.text-success.text-nowrap.text-xs-right
+            %i.fa.fa-check
+            Purchased by #{ gift.purchaser.first_name } #{ gift.purchaser.last_name }
+        - else
+          %td.text-success.text-xs-right
+            %i.fa.fa-check
+            Purchased
+
+      - else
         %td.text-xs-right
           = form_for gift, url: gift_path(gift), method: :patch do |form|
-            = form.hidden_field :purchased, value: false
-            = form.hidden_field :purchaser_id, value: nil
-            = button_tag(type: 'submit', class: 'btn btn-success') do
-              %i.fa.fa-check
-              Purchased by You
-      - elsif gift.purchaser_id
-        %td.text-success.text-nowrap.text-xs-right
-          %i.fa.fa-check
-          Purchased by #{ gift.purchaser.first_name } #{ gift.purchaser.last_name }
-      - else
-        %td.text-success.text-xs-right
-          %i.fa.fa-check
-          Purchased
+            = form.hidden_field :purchased, value: true
+            = form.hidden_field :purchaser_id, value: current_user.id
+            = form.submit 'Mark as Purchased', class: 'btn btn-secondary'
 
     - else
       %td.text-xs-right
-        = form_for gift, url: gift_path(gift), method: :patch do |form|
-          = form.hidden_field :purchased, value: true
-          = form.hidden_field :purchaser_id, value: current_user.id
-          = form.submit 'Mark as Purchased', class: 'btn btn-secondary'
-
-  - else
-    %td.text-xs-right
-      = link_to edit_gift_path(gift) do
-        %i.fa.fa-cog{ 'aria-hidden': 'true' }
+        = link_to user_gifts_path(@user, render_edit: gift.id) do
+          %i.fa.fa-cog{ 'aria-hidden': 'true' }
