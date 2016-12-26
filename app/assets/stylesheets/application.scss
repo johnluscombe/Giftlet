@@ -72,13 +72,17 @@ a.nav-link.dropdown-toggle {
   text-decoration: none;
 }
 
+.edit-delete-icons, .save-cancel-buttons {
+  white-space: nowrap;
+}
+
+.edit-delete-icons > a {
+  text-decoration: none;
+}
+
 .edit-gift-container {
   text-align: center;
   vertical-align: middle;
-}
-
-.edit-gift-delete {
-  margin-top: 7px;
 }
 
 .edit-gift-name, .new-gift-name {
@@ -89,7 +93,7 @@ a.nav-link.dropdown-toggle {
 }
 
 .edit-gift-price, .new-gift-price {
-  margin-bottom: 8px;
+  margin-bottom: 15px;
 }
 
 .edit-gift-url, .new-gift-url {
@@ -103,11 +107,11 @@ a.nav-link.dropdown-toggle {
   color: #A94442;
 }
 
-.fa-cog, .fa-trash-o {
+.fa {
   color: gray;
 }
 
-.fa-trash-o {
+.fa-trash {
   margin-left: 10px;
 }
 

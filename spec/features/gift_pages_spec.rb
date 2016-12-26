@@ -309,21 +309,19 @@ describe 'Gift Pages' do
   end
 
   describe 'deleting gift' do
-    let(:delete) { 'DELETE' }
     let!(:new_gift) { FactoryGirl.create(:gift, user: user) }
 
     before do
       login user
       click_link 'View Your Gifts'
-      click_link('', href: user_gifts_path(user, render_edit: new_gift.id))
     end
 
     it 'removes the gift from the system' do
-      expect { click_link delete }.to change(Gift, :count).by(-1)
+      expect { click_link('', href: gift_path(new_gift)) }.to change(Gift, :count).by(-1)
     end
 
     it 'redirects to user gifts page' do
-      click_link delete
+      click_link('', href: gift_path(new_gift))
       should have_current_path(user_gifts_path(user))
     end
   end

@@ -9,22 +9,18 @@
     - if params[:render_new]
       = form_for [@user, @gift] do |form|
         %table.table
-          %col{ width: '98%' }
-          %col{ width: '1%' }
-          %col{ width: '1%' }
-          = render partial: 'gift', collection: @gifts, locals: { f: form }
-          = render partial: 'new', locals: { f: form }
-        = form.submit 'SAVE', class: 'btn btn-success'
-        = link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-outline-danger'
-    - elsif params[:render_edit]
-      = form_for @gift do |form|
-        %table.table
-          %col{ width: '98%' }
+          %col{ width: '90%' }
           %col{ width: '9%' }
           %col{ width: '1%' }
           = render partial: 'gift', collection: @gifts, locals: { f: form }
-        = form.submit 'SAVE', class: 'btn btn-success'
-        = link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-outline-danger'
+          = render partial: 'new', locals: { f: form }
+    - elsif params[:render_edit]
+      = form_for @gift do |form|
+        %table.table
+          %col{ width: '90%' }
+          %col{ width: '9%' }
+          %col{ width: '1%' }
+          = render partial: 'gift', collection: @gifts, locals: { f: form }
     - else
       %table.table
         %col{ width: '90%' }
@@ -35,8 +31,8 @@
 
   - else
     %table.table
-      %col{ width: '89%' }
-      %col{ width: '10%' }
+      %col{ width: '90%' }
+      %col{ width: '9%' }
       %col{ width: '1%' }
       = render @gifts
 - elsif @user == current_user
@@ -48,8 +44,6 @@
         %col{ width: '1%' }
         = render partial: 'gift', collection: @gifts, locals: { f: form }
         = render partial: 'new', locals: { f: form }
-      = form.submit 'SAVE', class: 'btn btn-success'
-      = link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-outline-danger'
   - else
     %p You have not added any gifts yet!
     = link_to 'ADD NEW GIFT', user_gifts_path(@user, render_new: true), class: 'btn btn-success'
