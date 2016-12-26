@@ -61,27 +61,11 @@ describe 'Routes' do
                                          )
     end
 
-    it 'routes GET #new' do
-      expect(:get => 'users/1/gifts/new').to route_to(
-                                                 controller: 'gifts',
-                                                 action: 'new',
-                                                 user_id: '1'
-                                             )
-    end
-
     it 'routes POST #create' do
       expect(:post => 'gifts').to route_to(
                                       controller: 'gifts',
                                       action: 'create'
                                   )
-    end
-
-    it 'routes GET #edit' do
-      expect(:get => 'gifts/1/edit').to route_to(
-                                            controller: 'gifts',
-                                            action: 'edit',
-                                            id: '1'
-                                        )
     end
 
     it 'routes PATCH #update' do

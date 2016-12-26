@@ -16,21 +16,15 @@ class GiftsController < ApplicationController
   def create
     @user = User.find(params[:user_id])
     @gift = @user.gifts.build(safe_params)
-    if @gift.save
-      redirect_to user_gifts_path(@user)
-    else
-      render 'index'
-    end
+    @gift.save
+    redirect_to :back
   end
 
   def update
     @gift = Gift.find(params[:id])
     @user = @gift.user
-    if @gift.update(safe_params)
-      redirect_to user_gifts_path(@user)
-    else
-      render 'index'
-    end
+    @gift.update(safe_params)
+    redirect_to user_gifts_path(@user)
   end
 
   def destroy

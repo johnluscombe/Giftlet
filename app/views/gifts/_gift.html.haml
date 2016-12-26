@@ -1,5 +1,5 @@
-- if params[:render_edit].to_i == gift.id
-  = render partial: 'fields', locals: { f: f }
+- if @user == current_user and params[:render_edit].to_i == gift.id
+  = render partial: 'edit', locals: { f: f, gift: gift }
 - else
   %tr[gift]
     %td

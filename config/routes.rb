@@ -2,10 +2,10 @@ Rails.application.routes.draw do
   root 'logins#new'
 
   resources :users, only: [:index, :new, :create], shallow: true do
-    resources :gifts, except: :new
+    resources :gifts, except: [:new, :edit]
   end
 
-  resources :gifts
+  resources :gifts, except: [:new, :edit]
 
   get 'login', to: 'logins#new', as: :login
   post 'login', to: 'logins#create', as: :logins

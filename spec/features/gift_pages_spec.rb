@@ -53,7 +53,7 @@ describe 'Gift Pages' do
               should have_link(user_gift.name)
             end
 
-            should have_css("a[href='#{ edit_gift_path(user_gift) }']")
+            should have_css("a[href='#{ user_gifts_path(user, render_edit: user_gift.id) }']")
             should_not have_content('Purchased')
           end
         end
@@ -117,7 +117,7 @@ describe 'Gift Pages' do
               should have_link(user_gift.name)
             end
 
-            should_not have_css("a[href='#{ edit_gift_path(user_gift) }']")
+            should_not have_css("a[href='#{ user_gifts_path(user, render_edit: user_gift.id) }']")
 
             within(:css, "tr#gift_#{ user_gift.id }") do
               if !user_gift.purchased
@@ -149,11 +149,11 @@ describe 'Gift Pages' do
   end
 
   describe 'creating new gift' do
-    let(:submit) { 'SUBMIT' }
+    let(:submit) { 'SAVE' }
     let(:cancel) { 'CANCEL' }
 
     describe 'when not logged in' do
-      before { visit new_user_gift_path(user) }
+      before { visit user_gifts_path(user, render_new: true) }
 
       it 'redirects to login page' do
         should have_current_path(login_path)
@@ -163,11 +163,15 @@ describe 'Gift Pages' do
     describe 'when logged in as different user' do
       before do
         login user
-        visit new_user_gift_path(second_user)
+        visit user_gifts_path(second_user, render_new: true)
       end
 
-      it 'redirects to users page' do
-        should have_current_path(users_path)
+      it 'should not render new gift form' do
+        should_not have_selector('tr#new_gift')
+      end
+
+      it 'should not have "ADD NEW GIFT" button' do
+        should_not have_link('ADD NEW GIFT')
       end
     end
 
@@ -178,23 +182,14 @@ describe 'Gift Pages' do
         click_link 'ADD NEW GIFT'
       end
 
-      it 'allows access' do
-        should have_current_path(new_user_gift_path(user))
-      end
-
       describe 'with invalid name' do
         it 'does not add the gift to the system' do
           expect { click_button submit }.not_to change(Gift, :count)
         end
 
-        it 'produces an error message' do
+        it 'redirects to new view' do
           click_button submit
-          should have_css('div.alert')
-        end
-
-        it 're-renders the new view' do
-          click_button submit
-          should have_content('New Gift')
+          should have_current_path(user_gifts_path(user, render_new: true))
         end
       end
 
@@ -205,9 +200,9 @@ describe 'Gift Pages' do
           expect { click_button submit }.to change(Gift, :count).by(1)
         end
 
-        it 'redirects to user gifts page' do
+        it 'redirects to new view' do
           click_button submit
-          should have_current_path(user_gifts_path(user))
+          should have_current_path(user_gifts_path(user, render_new: true))
         end
       end
 
@@ -225,14 +220,31 @@ describe 'Gift Pages' do
   end
 
   describe 'editing gift' do
-    let(:submit) { 'UPDATE GIFT' }
+    let(:submit) { 'SAVE' }
     let(:cancel) { 'CANCEL' }
     let!(:new_gift) { FactoryGirl.create(:gift, user: user) }
+    let!(:other_user_gift) { FactoryGirl.create(:gift, user: second_user) }
 
     describe 'when not logged in' do
+      before { visit user_gifts_path(user, render_edit: new_gift.id) }
+
       it 'redirects to login page' do
-        visit edit_gift_path(new_gift)
         should have_current_path(login_path)
+      end
+    end
+
+    describe 'when logged in as different user' do
+      before do
+        login user
+        visit user_gifts_path(second_user, render_edit: other_user_gift.id)
+      end
+
+      it 'should not render edit gift form' do
+        should_not have_selector('tr#edit_gift')
+      end
+
+      it 'should not have "ADD NEW GIFT" button' do
+        should_not have_link('', href: user_gifts_path(second_user, render_edit: other_user_gift.id))
       end
     end
 
@@ -241,12 +253,8 @@ describe 'Gift Pages' do
         login user
         click_link 'View Your Gifts'
         within(:css, "tr#gift_#{ new_gift.id }") do
-          click_link('', href: edit_gift_path(new_gift))
+          click_link('', href: user_gifts_path(user, render_edit: new_gift.id))
         end
-      end
-
-      it 'allows access' do
-        should have_current_path(edit_gift_path(new_gift))
       end
 
       describe 'with invalid name' do
@@ -259,11 +267,6 @@ describe 'Gift Pages' do
 
         it 'does not add a new gift to the system' do
           expect { click_button submit }.not_to change(Gift, :count)
-        end
-
-        it 're-renders the edit view' do
-          click_button submit
-          should have_content('Edit')
         end
       end
 
@@ -306,15 +309,13 @@ describe 'Gift Pages' do
   end
 
   describe 'deleting gift' do
-    let(:delete) { 'DELETE GIFT' }
+    let(:delete) { 'DELETE' }
     let!(:new_gift) { FactoryGirl.create(:gift, user: user) }
 
     before do
       login user
       click_link 'View Your Gifts'
-      within(:css, "tr#gift_#{ new_gift.id }") do
-        click_link('', href: edit_gift_path(new_gift))
-      end
+      click_link('', href: user_gifts_path(user, render_edit: new_gift.id))
     end
 
     it 'removes the gift from the system' do

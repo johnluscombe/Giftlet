@@ -1,10 +1,14 @@
 require_relative '../rails_helper'
 require_relative '../support/login'
+require_relative '../support/environment'
 
 describe GiftsController do
+  render_views
+
   let(:user) { FactoryGirl.create(:user) }
   let(:other_user) { FactoryGirl.create(:user) }
   let(:gift) { FactoryGirl.create(:gift, user: user) }
+  let(:other_user_gift) { FactoryGirl.create(:gift, user: other_user) }
 
   subject { response }
 
@@ -31,29 +35,54 @@ describe GiftsController do
         should render_template(:index)
       end
     end
-  end
 
-  describe 'GET #new' do
-    describe 'user not logged in' do
-      it 'redirects to login page' do
-        get :new, user_id: user
-        should redirect_to(login_path)
+    describe 'render_new' do
+      describe 'user not logged in' do
+        it 'redirects to login page' do
+          get :index, user_id: user, render_new: true
+          should redirect_to(login_path)
+        end
+      end
+
+      describe 'other user' do
+        it 'does not render new gift form' do
+          direct_login(user)
+          get :index, user_id: other_user, render_new: true
+          should_not render_template(partial: '_new')
+        end
+      end
+
+      describe 'correct user' do
+        it 'renders new gift form' do
+          direct_login(user)
+          get :index, user_id: user, render_new: true
+          should render_template(partial: '_new')
+        end
       end
     end
 
-    describe 'wrong user logged in' do
-      it 'redirects to users page' do
-        direct_login(user)
-        get :new, user_id: other_user
-        should redirect_to(users_path)
+    describe 'render_edit' do
+      describe 'user not logged in' do
+        it 'redirects to login page' do
+          get :index, user_id: user, render_edit: gift.id
+          should redirect_to(login_path)
+        end
       end
-    end
 
-    describe 'user logged in' do
-      it 'renders :new template' do
-        direct_login(user)
-        get :new, user_id: user
-        should render_template(:new)
+      describe 'other user' do
+        it 'does not render edit gift form' do
+          direct_login(user)
+          get :index, user_id: other_user, render_edit: other_user_gift.id
+          should_not render_template(partial: '_edit')
+        end
+      end
+
+      describe 'correct user' do
+        it 'renders edit gift form' do
+          direct_login(user)
+          get :index, user_id: user, render_edit: gift.id
+          should render_template(partial: '_edit')
+        end
       end
     end
   end
@@ -88,7 +117,10 @@ describe GiftsController do
     end
 
     describe 'user logged in' do
-      before { direct_login(user) }
+      before do
+        direct_login(user)
+        set_http_referer(user_gifts_path(user, render_new: true))
+      end
 
       it 'creates new gift' do
         expect {
@@ -98,32 +130,7 @@ describe GiftsController do
 
       it 'redirects to user gifts page' do
         post :create, user_id: user, gift: { name: 'New Gift' }
-        should redirect_to(user_gifts_path(user))
-      end
-    end
-  end
-
-  describe 'GET #edit' do
-    describe 'user not logged in' do
-      it 'redirects to login page' do
-        get :edit, id: gift
-        should redirect_to(login_path)
-      end
-    end
-
-    describe 'wrong user logged in' do
-      it 'redirects to users page' do
-        direct_login(other_user)
-        get :edit, id: gift
-        should redirect_to(users_path)
-      end
-    end
-
-    describe 'user logged in' do
-      it 'renders :edit template' do
-        direct_login(user)
-        get :edit, id: gift
-        should render_template(:edit)
+        should redirect_to(user_gifts_path(user, render_new: true))
       end
     end
   end

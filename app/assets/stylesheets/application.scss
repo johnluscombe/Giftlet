@@ -58,8 +58,11 @@ a.nav-link.dropdown-toggle {
   background-color: transparent;
 }
 
-.btn-outline-danger:hover {
+.btn.btn-outline-danger:active,
+.btn.btn-outline-danger:focus,
+.btn.btn-outline-danger:hover {
   background-color: transparent;
+  border-color: #d9534f;
   color: #d9534f;
 }
 
@@ -67,6 +70,33 @@ a.nav-link.dropdown-toggle {
 .delete-gift:hover {
   color: gray;
   text-decoration: none;
+}
+
+.edit-gift-container {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.edit-gift-delete {
+  margin-top: 7px;
+}
+
+.edit-gift-name, .new-gift-name {
+  float: left;
+  margin-bottom: 5px;
+  margin-right: 1%;
+  width: 49%;
+}
+
+.edit-gift-price, .new-gift-price {
+  margin-bottom: 8px;
+}
+
+.edit-gift-url, .new-gift-url {
+  float: left;
+  margin-bottom: 5px;
+  margin-left: 1%;
+  width: 49%;
 }
 
 .error-div, .error-div > * {
@@ -115,20 +145,6 @@ input#username, input#password {
 
 .new-gift-description {
   margin-bottom: 10px;
-}
-
-.new-gift-name {
-  float: left;
-  margin-bottom: 5px;
-  margin-right: 1%;
-  width: 49%;
-}
-
-.new-gift-url {
-  float: left;
-  margin-bottom: 5px;
-  margin-left: 1%;
-  width: 49%;
 }
 
 .small-text {
