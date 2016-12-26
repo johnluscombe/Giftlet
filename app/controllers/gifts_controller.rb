@@ -1,7 +1,9 @@
 class GiftsController < ApplicationController
   before_filter :ensure_user_logged_in
-  before_filter :ensure_user_exists, only: [:index]
-  before_filter :ensure_correct_user, except: [:index]
+  before_filter :ensure_user_exists, only: :index
+  before_filter :ensure_correct_user, except: [:index, :mark_as_purchased, :mark_as_unpurchased]
+  before_filter :ensure_can_mark_as_purchased, only: :mark_as_purchased
+  before_filter :ensure_can_mark_as_unpurchased, only: :mark_as_unpurchased
 
   def index
     @user = User.find(params[:user_id])
@@ -24,6 +26,20 @@ class GiftsController < ApplicationController
     @gift = Gift.find(params[:id])
     @user = @gift.user
     @gift.update(safe_params)
+    redirect_to user_gifts_path(@user)
+  end
+
+  def mark_as_purchased
+    @gift = Gift.find(params[:gift_id])
+    @user = @gift.user
+    @gift.update(purchased: true, purchaser_id: current_user.id)
+    redirect_to user_gifts_path(@user)
+  end
+
+  def mark_as_unpurchased
+    @gift = Gift.find(params[:gift_id])
+    @user = @gift.user
+    @gift.update(purchased: false, purchaser_id: nil)
     redirect_to user_gifts_path(@user)
   end
 
@@ -57,6 +73,25 @@ class GiftsController < ApplicationController
 
     unless current_user?(@user)
       redirect_to users_path
+    end
+  end
+
+  def ensure_can_mark_as_purchased
+    @gift = Gift.find(params[:gift_id])
+    @user = @gift.user
+
+    if current_user?(@user) or @gift.purchased
+      redirect_to user_gifts_path(@user)
+    end
+  end
+
+  def ensure_can_mark_as_unpurchased
+    @gift = Gift.find(params[:gift_id])
+    @recipient = @gift.user
+    @purchaser = User.find(@gift.purchaser_id)
+
+    unless current_user?(@purchaser)
+      redirect_to user_gifts_path(@recipient)
     end
   end
 

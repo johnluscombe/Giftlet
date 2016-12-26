@@ -5,7 +5,10 @@ Rails.application.routes.draw do
     resources :gifts, except: [:new, :edit]
   end
 
-  resources :gifts, except: [:new, :edit]
+  resources :gifts, except: [:new, :edit] do
+    patch 'mark_as_purchased'
+    patch 'mark_as_unpurchased'
+  end
 
   get 'login', to: 'logins#new', as: :login
   post 'login', to: 'logins#create', as: :logins

@@ -26,5 +26,9 @@ FactoryGirl.define do
     factory :gift_with_url do
       url 'http://www.google.com/'
     end
+
+    factory :purchased_gift do
+      purchased true
+    end
   end
 end

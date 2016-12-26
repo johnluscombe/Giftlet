@@ -20,12 +20,9 @@
       - if gift.purchased
         - if gift.purchaser_id == current_user.id
           %td.text-xs-right
-            = form_for gift, url: gift_path(gift), method: :patch do |form|
-              = form.hidden_field :purchased, value: false
-              = form.hidden_field :purchaser_id, value: nil
-              = button_tag(type: 'submit', class: 'btn btn-success') do
-                %i.fa.fa-check
-                Purchased by You
+            = link_to gift_mark_as_unpurchased_path(gift), method: :patch, class: 'btn btn-success' do
+              %i.fa.fa-check
+              Purchased by You
         - elsif gift.purchaser_id
           %td.text-success.text-nowrap.text-xs-right
             %i.fa.fa-check
@@ -37,10 +34,7 @@
 
       - else
         %td.text-xs-right
-          = form_for gift, url: gift_path(gift), method: :patch do |form|
-            = form.hidden_field :purchased, value: true
-            = form.hidden_field :purchaser_id, value: current_user.id
-            = form.submit 'Mark as Purchased', class: 'btn btn-secondary'
+          = link_to 'Mark as Purchased', gift_mark_as_purchased_path(gift), method: :patch, class: 'btn btn-secondary'
 
     - else
       %td.text-xs-right.edit-delete-icons

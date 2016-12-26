@@ -76,6 +76,22 @@ describe 'Routes' do
                                      )
     end
 
+    it 'routes PATCH #mark_as_purchased' do
+      expect(:patch => 'gifts/1/mark_as_purchased').to route_to(
+                                                           controller: 'gifts',
+                                                           action: 'mark_as_purchased',
+                                                           gift_id: '1'
+                                                       )
+    end
+
+    it 'routes PATCH #mark_as_unpurchased' do
+      expect(:patch => 'gifts/1/mark_as_unpurchased').to route_to(
+                                                           controller: 'gifts',
+                                                           action: 'mark_as_unpurchased',
+                                                           gift_id: '1'
+                                                       )
+    end
+
     it 'routes DELETE #destroy' do
       expect(:delete => 'gifts/1').to route_to(
                                           controller: 'gifts',

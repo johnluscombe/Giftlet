@@ -121,16 +121,16 @@ describe 'Gift Pages' do
 
             within(:css, "tr#gift_#{ user_gift.id }") do
               if !user_gift.purchased
-                should have_button('Mark as Purchased')
-                should_not have_button('Purchased by You')
+                should have_link('Mark as Purchased')
+                should_not have_link('Purchased by You')
                 should_not have_content("Purchased by #{ user.fullname }")
               elsif user_gift.purchaser_id == user.id
-                should_not have_button('Mark as Purchased')
-                should have_button('Purchased by You')
+                should_not have_link('Mark as Purchased')
+                should have_link('Purchased by You')
                 should_not have_content("Purchased by #{ user.fullname }")
               else
-                should_not have_button('Mark as Purchased')
-                should_not have_button('Purchased by You')
+                should_not have_link('Mark as Purchased')
+                should_not have_link('Purchased by You')
                 should have_content("Purchased by #{ third_user.fullname }")
               end
             end
@@ -305,6 +305,103 @@ describe 'Gift Pages' do
           should have_current_path(user_gifts_path(user))
         end
       end
+    end
+  end
+
+  describe 'marking as purchased' do
+    let!(:first_user_gift) { FactoryGirl.create(:gift, user: user) }
+    let!(:second_user_gift) { FactoryGirl.create(:gift, user: second_user) }
+    let!(:purchased_gift) do
+      FactoryGirl.create(:purchased_gift, user: second_user,
+                         purchaser_id: third_user.id)
+    end
+
+    before { login user }
+
+    describe 'when already purchased' do
+      before { visit user_gifts_path(second_user) }
+
+      it 'has the correct text' do
+        within(:css, "tr#gift_#{ purchased_gift.id }") do
+          should_not have_link('Mark as Purchased')
+          should_not have_link('Purchased by You')
+          should have_selector('td', text: "Purchased by #{ third_user.fullname }")
+        end
+      end
+    end
+
+    describe 'when not yet purchased' do
+      before { visit user_gifts_path(second_user) }
+
+      it 'has the correct button' do
+        within(:css, "tr#gift_#{ second_user_gift.id }") do
+          should have_link('Mark as Purchased')
+          should_not have_content('Purchased by You')
+          should_not have_selector('td', text: 'Purchased by')
+        end
+      end
+
+      it 'changes the data' do
+        click_link 'Mark as Purchased'
+        expect(second_user_gift.reload.purchased).to be(true)
+        expect(second_user_gift.reload.purchaser_id).to eq(user.id)
+      end
+
+      it 'does not add a new gift to the system' do
+        expect { click_link 'Mark as Purchased' }.not_to change(Gift, :count)
+      end
+
+      it 'redirects to user gifts page' do
+        click_link 'Mark as Purchased'
+        should have_current_path(user_gifts_path(second_user))
+      end
+    end
+
+    describe 'own gifts' do
+      before { visit user_gifts_path(user) }
+
+      it 'DOES NOT SHOW ANY PURCHASED INFORMATION' do
+        within(:css, "tr#gift_#{ first_user_gift.id }") do
+          should_not have_link('Mark as Purchased')
+          should_not have_link('Purchased by You')
+          should_not have_selector('li', text: 'Purchased by')
+        end
+      end
+    end
+  end
+
+  describe 'marking as unpurchased' do
+    let!(:gift_purchased_by_self) do
+      FactoryGirl.create(:purchased_gift, user: second_user,
+                         purchaser_id: user.id)
+    end
+
+    before do
+      login user
+      visit user_gifts_path(second_user)
+    end
+
+    it 'has the correct button' do
+      within(:css, "tr#gift_#{ gift_purchased_by_self.id }") do
+        should_not have_link('Mark as Purchased')
+        should have_link('Purchased by You')
+        should_not have_selector('Purchased by')
+      end
+    end
+
+    it 'changes the data' do
+      click_link 'Purchased by You'
+      expect(gift_purchased_by_self.reload.purchased).to be(false)
+      expect(gift_purchased_by_self.reload.purchaser_id).to be(nil)
+    end
+
+    it 'does not add a new gift to the system' do
+      expect { click_link 'Purchased by You' }.not_to change(Gift, :count)
+    end
+
+    it 'redirects top user gifts page' do
+      click_link 'Purchased by You'
+      should have_current_path(user_gifts_path(second_user))
     end
   end
 
