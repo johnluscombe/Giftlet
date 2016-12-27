@@ -80,7 +80,7 @@ class GiftsController < ApplicationController
     @gift = Gift.find(params[:gift_id])
     @user = @gift.user
 
-    if current_user?(@user) or @gift.purchased
+    if @gift.purchased
       redirect_to user_gifts_path(@user)
     end
   end

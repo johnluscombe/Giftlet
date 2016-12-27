@@ -71,6 +71,12 @@ describe Gift do
     it { should be_valid }
   end
 
+  describe 'does not allow purchaser to be gift recipient' do
+    before { gift.purchaser_id = gift.user_id }
+
+    it { should_not be_valid }
+  end
+
   describe 'accepts duplicate gifts' do
     let(:duplicate) do
       d = gift.dup

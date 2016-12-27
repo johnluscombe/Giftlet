@@ -59,7 +59,7 @@ describe 'User Pages' do
       before do
         unset_env('SITE_PASSCODE')
         visit login_path
-        click_link 'Create New Account'
+        click_link 'Sign Up'
       end
 
       it 'redirects to login page' do
@@ -78,7 +78,7 @@ describe 'User Pages' do
       before do
         set_env('SITE_PASSCODE', 'test')
         visit login_path
-        click_link 'Create New Account'
+        click_link 'Sign Up'
       end
 
       it 'allows access' do

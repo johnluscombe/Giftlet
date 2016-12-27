@@ -13,7 +13,8 @@ describe 'Navbar' do
       within(:css, 'nav.navbar') do
         should have_content('Giftlet')
         should have_content('BETA')
-        should have_content('You are not logged in')
+        should have_selector('a', text: 'Log In')
+        should have_link('Sign Up', href: new_user_path)
       end
     end
   end

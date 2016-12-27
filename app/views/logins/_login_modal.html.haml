@@ -1,0 +1,13 @@
+.modal.fade#loginModal{ tabindex: '-1', role: 'dialog', 'aria-labelledby': 'loginModalLabel', 'aria-hidden': 'true' }
+  .modal-dialog{ role: 'document' }
+    .modal-content
+      = form_tag logins_path do
+        .modal-header
+          %button.close{ type: 'button', 'data-dismiss': 'modal', 'aria-label': 'Close' }
+            %span{ 'aria-hidden': 'true' } &times;
+          %h4.modal-title#loginModalLabel Log In
+        .modal-body
+          = text_field_tag :username, params[:username], class: 'form-control', placeholder: 'Username'
+          = password_field_tag :password, params[:password], class: 'form-control', placeholder: 'Password'
+        .modal-footer
+          = submit_tag 'Log In', class: 'btn btn-primary'

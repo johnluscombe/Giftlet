@@ -17,6 +17,8 @@
 
 a#navbar-dropdown {
   color: white;
+  padding-bottom: 8px;
+  padding-top: 8px;
 }
 
 a.nav-link.dropdown-toggle {
@@ -24,46 +26,40 @@ a.nav-link.dropdown-toggle {
   font-size: 0.8em;
 }
 
-.beta-tag.navbar-text {
-  background-color: darkorange;
-  border-radius: 5px;
-  font-size: 0.7em;
-  line-height: 20px;
-  margin-bottom: 10.8px;
-  margin-top: 10.8px;
-  padding: 0 4px;
-}
-
-.beta-tag-about.navbar-text {
-  background-color: darkorange;
-  border-radius: 5px;
-  font-size: 0.7em;
-  line-height: 20px;
-  margin-bottom: 4px;
-  margin-left: 10px;
-  margin-top: 4px;
-  overflow: auto;
-  padding: 0 4px;
-}
-
 .brand {
   display: inline;
 }
 
-.btn, .form-control, .input-group-addon {
+.btn, .form-control {
   border-radius: 0;
 }
 
-.btn-outline-danger {
-  background-color: transparent;
-}
-
+.btn.btn-outline-danger,
 .btn.btn-outline-danger:active,
 .btn.btn-outline-danger:focus,
 .btn.btn-outline-danger:hover {
   background-color: transparent;
   border-color: #d9534f;
   color: #d9534f;
+}
+
+.btn.btn-login {
+  color: white;
+}
+
+.btn.btn-login:hover {
+  color: lightgrey;
+  text-decoration: none;
+}
+
+.container-jumbotron {
+  margin-left: 15px;
+}
+
+.container-mobile {
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
 }
 
 .delete-gift,
@@ -115,32 +111,48 @@ a.nav-link.dropdown-toggle {
   margin-left: 10px;
 }
 
-.gift-field {
-  margin-bottom: 10px;
-  width: 400px;
-}
-
 .hand-icon {
   cursor: pointer;
 }
 
-input#username, input#password {
-  display: inline;
-  width: 250px;
+input#username {
+  margin-bottom: 15px;
+}
+
+.jumbotron {
+  background-position: right top;
+  background-image: image-url('main-public-image');
+  background-size: cover;
+}
+
+.jumbotron > * {
+  color: white;
+}
+
+.jumbotron-text {
+  width: 60%;
+}
+
+.mobile-public-image {
+  width: 100%;
 }
 
 .nav-item, .navbar-text {
-  line-height: 28px;
+  line-height: 36px;
 }
 
 .navbar {
   border-radius: 0;
+  height: 68px;
   margin-bottom: 50px;
 }
 
 .navbar-brand {
   font-family: 'Raleway-Bold', Helvetica, Arial, sans-serif;
   font-size: 1.5em;
+  height: 68px;
+  padding-bottom: 8px;
+  padding-top: 8px;
 }
 
 .navbar-text {
@@ -155,6 +167,11 @@ input#username, input#password {
   color: #999999;
   font-size: 0.8em;
   margin-bottom: 0;
+}
+
+.tag.tag-warning {
+  margin-bottom: 16px;
+  margin-top: 16px;
 }
 
 .version {

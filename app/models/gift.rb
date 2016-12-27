@@ -4,6 +4,7 @@ class Gift < ActiveRecord::Base
   validates :user, presence: true
   validates :name, presence: true
   validates :price, numericality: true, allow_nil: true
+  validate :purchaser_not_self
 
   before_save :change_zero_price_to_nil
 
@@ -39,6 +40,12 @@ class Gift < ActiveRecord::Base
   def change_zero_price_to_nil
     if self.price == 0.0
       self.price = nil
+    end
+  end
+
+  def purchaser_not_self
+    if self.user_id == self.purchaser_id
+      errors.add(:purchaser, 'cannot be the gift recipient')
     end
   end
 end
