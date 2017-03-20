@@ -4,7 +4,7 @@
   %tr[gift]
     %td
       - unless gift.url.blank?
-        = link_to gift.name, gift.full_url
+        = link_to gift.name, gift.full_url, target: '_blank'
       - else
         = gift.name
       - unless gift.description.blank?
