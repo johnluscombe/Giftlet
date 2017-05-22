@@ -17,8 +17,4 @@ class User < ActiveRecord::Base
   def unpurchased_gifts
     self.gifts.where(purchased: [false, nil])
   end
-
-  def amount_spent_on(recipient)
-    recipient.gifts.where(purchaser_id: self.id).sum(:price)
-  end
 end
