@@ -19,3 +19,15 @@
 function redirectTo(path) {
     window.location = path;
 }
+
+function checkConfirmation() {
+    var button = $("#update_password_button");
+    var password = $("#password").val();
+    var confirmation = $("#password_confirmation").val();
+
+    if (password === confirmation && password !== "") {
+        button.prop('disabled', false);
+    } else {
+        button.prop('disabled', true);
+    }
+}

@@ -9,10 +9,10 @@
   %body
     = render 'layouts/navbar'
 
-    .main.container-fluid
-      - flash.each do |type, message|
-        %div{ class: "alert alert-#{type} alert-dismissible fade in", role: 'alert' }
-          %button.close{ type: 'button', 'data-dismiss': 'alert', 'aria-label': 'Close' }
-            %span{ 'aria-hidden': 'true' } &times;
-          = message
-      = yield
+    - if @hide_sidebar
+      = render 'layouts/content'
+    - else
+      .sidebar
+        = render 'layouts/sidebar'
+      .content
+        = render 'layouts/content'

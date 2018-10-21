@@ -1,17 +1,21 @@
 class GiftsController < ApplicationController
   before_filter :ensure_user_logged_in
-  before_filter :ensure_user_exists, only: :index
   before_filter :ensure_correct_user, except: [:index, :mark_as_purchased, :mark_as_unpurchased]
   before_filter :ensure_can_mark_as_purchased, only: :mark_as_purchased
   before_filter :ensure_can_mark_as_unpurchased, only: :mark_as_unpurchased
 
   def index
-    @user = User.find(params[:user_id])
-    @gifts = @user.gifts.order(:name)
-    if params[:render_new]
-      @gift = @user.gifts.build
-    elsif params[:render_edit]
-      @gift = Gift.find(params[:render_edit])
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+      @gifts = @user.gifts.order(:name)
+      if params[:render_new]
+        @gift = @user.gifts.build
+      elsif params[:render_edit]
+        @gift = Gift.find(params[:render_edit])
+      end
+    else
+      user = User.where.not(id: current_user.id).first
+      redirect_to user_gifts_path(user)
     end
   end
 
@@ -72,7 +76,7 @@ class GiftsController < ApplicationController
     end
 
     unless current_user?(@user)
-      redirect_to users_path
+      redirect_to gifts_path
     end
   end
 
@@ -93,21 +97,5 @@ class GiftsController < ApplicationController
     unless current_user?(@purchaser)
       redirect_to user_gifts_path(@recipient)
     end
-  end
-
-  def ensure_user_exists
-    unless User.find(params[:user_id])
-      redirect_to users_path
-    end
-  rescue
-    redirect_to users_path
-  end
-
-  def ensure_gift_exists
-    unless Gift.find(params[:id])
-      redirect_to users_path
-    end
-  rescue
-    redirect_to users_path
   end
 end

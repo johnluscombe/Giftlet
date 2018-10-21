@@ -3,10 +3,6 @@ class UsersController < ApplicationController
   before_filter :ensure_user_not_logged_in, only: [:new, :create]
   before_filter :ensure_passcode_exists, only: [:new, :create]
 
-  def index
-    @users = User.where.not(id: current_user.id)
-  end
-
   def new
     @user = User.new
   end
@@ -23,19 +19,14 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit_basic_information
-  end
-
-  def edit_password
-  end
-
   def update_basic_information
     if current_user.update(safe_params)
-      redirect_to edit_basic_information_path
+      flash[:success] = 'Profile updated'
     else
-      flash.now[:danger] = 'There was an error saving'
-      render 'edit_basic_information'
+      flash[:danger] = 'There was an error saving'
     end
+
+    redirect_to :back
   end
 
   def update_password
@@ -43,13 +34,14 @@ class UsersController < ApplicationController
     if old_password_correct
       if current_user.update(safe_params)
         flash[:success] = 'Password updated'
-        redirect_to users_path
       else
-        flash[:danger] = 'Password and confirmation do not match'
-        redirect_to edit_password_path
+        flash[:danger] = 'There was an error saving'
       end
+
+      redirect_to :back
     else
-      redirect_to edit_password_path
+      flash[:danger] = 'Old password was incorrect'
+      redirect_to :back
     end
   end
 
@@ -68,7 +60,7 @@ class UsersController < ApplicationController
 
   def ensure_user_not_logged_in
     if current_user
-      redirect_to users_path
+      redirect_to gifts_path
     end
   end
 

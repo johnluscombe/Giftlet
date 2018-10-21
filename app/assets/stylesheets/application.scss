@@ -10,33 +10,12 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require_tree .
+ *= require_self
  */
 @import "bootstrap";
 @import "font-awesome-sprockets";
 @import "font-awesome";
-
-a#navbar-dropdown {
-  color: white;
-  padding-bottom: 8px;
-  padding-top: 8px;
-}
-
-a.nav-link.dropdown-toggle {
-  font-family: 'Raleway-SemiBold', Helvetica, Arial, sans-serif;
-  font-size: 0.8em;
-}
-
-.beta-tag-about {
-  overflow: auto;
-  margin-bottom: 5px;
-  margin-left: 5px;
-  margin-top: 13px;
-}
-
-.beta-tag-navbar {
-  margin-bottom: 16px;
-  margin-top: 16px;
-}
 
 .brand {
   display: inline;
@@ -70,14 +49,21 @@ button.close {
   text-shadow: none;
 }
 
-.container-jumbotron {
-  margin-left: 15px;
+.change-password-field {
+  margin-bottom: 5px;
 }
 
 .container-mobile {
   margin-left: 0;
   margin-right: 0;
   width: 100%;
+}
+
+.content {
+  margin-left: 300px;
+  margin-right: 25px;
+  margin-top: 25px;
+  padding-left: 25px;
 }
 
 .delete-gift,
@@ -137,20 +123,6 @@ input#username {
   margin-bottom: 15px;
 }
 
-.jumbotron {
-  background-position: right top;
-  background-image: image-url('main-public-image');
-  background-size: cover;
-}
-
-.jumbotron > * {
-  color: white;
-}
-
-.jumbotron-text {
-  width: 60%;
-}
-
 .mobile-public-image {
   width: 100%;
 }
@@ -167,28 +139,6 @@ input#username {
 
 .modal-title {
   font-family: 'Raleway-SemiBold', Helvetica, Arial, sans-serif;
-}
-
-.nav-item, .navbar-text {
-  line-height: 36px;
-}
-
-.navbar {
-  border-radius: 0;
-  height: 68px;
-  margin-bottom: 50px;
-}
-
-.navbar-brand {
-  font-family: 'Raleway-Bold', Helvetica, Arial, sans-serif;
-  font-size: 1.5em;
-  height: 68px;
-  padding-bottom: 8px;
-  padding-top: 8px;
-}
-
-.navbar-text {
-  color: white;
 }
 
 .new-gift-description {
@@ -232,7 +182,7 @@ body {
 }
 
 @media (min-width: 1200px) {
-  .container-fluid {
+  .welcome-jumbotron {
     margin-left: 120px;
     margin-right: 120px;
   }

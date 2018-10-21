@@ -1,0 +1,50 @@
+nav.navbar {
+  border-radius: 0;
+  height: 68px;
+
+  .navbar-brand {
+    font-family: 'Raleway-Bold', Helvetica, Arial, sans-serif;
+    font-size: 1.5em;
+    height: 52px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+  }
+
+  .nav-item {
+    display: inline-block;
+    line-height: 36px;
+    margin-left: 5px;
+
+    .nav-link {
+      color: white;
+      font-family: 'Raleway-SemiBold', Helvetica, Arial, sans-serif;
+      font-size: 0.8em;
+      padding-bottom: 8px;
+      padding-top: 8px;
+    }
+  }
+
+  .navbar-text {
+    color: white;
+    line-height: 36px;
+  }
+
+  .beta-tag-about {
+    overflow: auto;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-top: 13px;
+  }
+
+  .beta-tag-navbar {
+    margin-bottom: 16px;
+    margin-top: 16px;
+  }
+
+  .user-picture {
+    border-radius: 15px;
+    height: 30px;
+    margin-top: 11px;
+    width: 30px;
+  }
+}

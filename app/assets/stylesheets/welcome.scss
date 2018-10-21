@@ -1,0 +1,21 @@
+.welcome-jumbotron {
+  margin-top: 30px;
+
+  .jumbotron {
+    background-position: right top;
+    background-image: image-url('main-public-image');
+    background-size: cover;
+
+    * {
+      color: white;
+    }
+
+    .container-jumbotron {
+      margin-left: 15px;
+
+      .jumbotron-text {
+        width: 60%;
+      }
+    }
+  }
+}

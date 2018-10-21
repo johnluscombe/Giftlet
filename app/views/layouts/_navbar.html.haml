@@ -1,6 +1,6 @@
 %nav.navbar.navbar-dark.bg-primary
   - if current_user
-    = link_to 'Giftlet', users_path, class: 'navbar-brand'
+    = link_to 'Giftlet', gifts_path, class: 'navbar-brand'
     %span.tag.tag-warning.beta-tag-navbar.float-xs-left
       BETA
     %ul.nav.navbar-nav
@@ -13,11 +13,11 @@
             &nbsp;
             View Your Gifts
           .dropdown-divider
-          = link_to edit_basic_information_path, class: 'dropdown-item' do
+          %a.dropdown-item.hand-icon{ 'data-toggle': 'modal', 'data-target': '#editBasicInfoModal' }
             %i.fa.fa-user
             &nbsp;
             Edit Basic Information
-          = link_to edit_password_path, class: 'dropdown-item' do
+          %a.dropdown-item.hand-icon{ 'data-toggle': 'modal', 'data-target': '#changePasswordModal' }
             %i.fa.fa-lock
             &nbsp;
             Change Password
@@ -31,6 +31,10 @@
             %i.fa.fa-sign-in
             &nbsp;
             Log Out
+      %li.nav-item.float-xs-right
+        = image_tag 'default_user.png', alt: 'User', class: 'user-picture'
+    = render 'users/edit_basic_information'
+    = render 'users/edit_password'
   - else
     = link_to 'Giftlet', root_path, class: 'navbar-brand'
     %span.tag.tag-warning.beta-tag-navbar.float-xs-left

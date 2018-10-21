@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.3.0'
-gem 'rails', '4.2.6'
+ruby '2.5.1'
+gem 'rails', '4.2.10'
 
 group :development do
   gem 'pry-rails'
@@ -23,7 +23,7 @@ group :production do
 end
 
 gem 'sass-rails', '~> 5.0'
-gem 'bootstrap', '~> 4.0.0.alpha5'
+gem 'bootstrap', '4.0.0.alpha5'
 gem 'font-awesome-sass', '~> 4.7.0'
 
 gem 'uglifier', '>= 1.3.0'
