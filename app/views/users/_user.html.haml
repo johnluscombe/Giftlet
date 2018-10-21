@@ -1,5 +1,0 @@
-%tr[user]
-  %td.hand-icon{ onclick: "redirectTo('#{ user_gifts_url(user) }')" }= user.fullname
-  %td.text-xs-center.hand-icon{ onclick: "redirectTo('#{ user_gifts_url(user) }')" }
-    %strong= user.unpurchased_gifts.count
-    %p.small-text UNPURCHASED

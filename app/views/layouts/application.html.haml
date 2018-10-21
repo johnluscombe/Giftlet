@@ -6,13 +6,18 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': true
     = javascript_include_tag 'application', 'data-turbolinks-track': true
     = csrf_meta_tags
+    %meta{ name: 'viewport', content: 'width=device-width, initial-scale=1' }
   %body
     = render 'layouts/navbar'
 
     - if @hide_sidebar
       = render 'layouts/content'
     - else
-      .sidebar
-        = render 'layouts/sidebar'
+      - if @show_mobile_sidebar
+        .sidebar
+          = render 'layouts/sidebar'
+      - else
+        .sidebar.hidden-sm-down
+          = render 'layouts/sidebar'
       .content
         = render 'layouts/content'

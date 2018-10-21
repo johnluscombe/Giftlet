@@ -3,7 +3,7 @@ class LoginsController < ApplicationController
     @hide_sidebar = true
 
     if current_user
-      redirect_to gifts_path
+      redirect_to users_path
     end
   end
 
@@ -11,7 +11,7 @@ class LoginsController < ApplicationController
     user = User.find_by(username: params[:username])
     if user and user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to gifts_path
+      redirect_to users_path
     else
       flash.now[:danger] = 'Invalid username or password'
       render 'new'

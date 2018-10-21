@@ -76,7 +76,7 @@ class GiftsController < ApplicationController
     end
 
     unless current_user?(@user)
-      redirect_to gifts_path
+      redirect_to users_path
     end
   end
 

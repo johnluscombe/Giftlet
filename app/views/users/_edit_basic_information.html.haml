@@ -2,7 +2,7 @@
   .modal-dialog{ role: 'document' }
     .modal-content
       = render 'shared/errors', object: current_user
-      = form_for current_user, id: 'edit-basic-info-form', url: { controller: 'users', action: 'update_basic_information' }, method: :patch do |f|
+      = form_for current_user, id: 'edit-basic-info-form', url: { controller: 'users', action: 'update_basic_information' }, html: {id: nil}, method: :patch do |f|
         .modal-header
           %button.close{ type: 'button', 'data-dismiss': 'modal', 'aria-label': 'Close' }
             %span{ 'aria-hidden': 'true' } &times;

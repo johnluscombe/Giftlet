@@ -1,3 +1,8 @@
+.hidden-md-up.users-back
+  = link_to users_path do
+    %i.fa.fa-chevron-left
+    Users
+
 - if @user == current_user
   %h1 Your Gifts
 - else

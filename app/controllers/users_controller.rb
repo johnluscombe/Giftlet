@@ -3,6 +3,10 @@ class UsersController < ApplicationController
   before_filter :ensure_user_not_logged_in, only: [:new, :create]
   before_filter :ensure_passcode_exists, only: [:new, :create]
 
+  def index
+    @show_mobile_sidebar = true
+  end
+
   def new
     @user = User.new
   end
@@ -60,7 +64,7 @@ class UsersController < ApplicationController
 
   def ensure_user_not_logged_in
     if current_user
-      redirect_to gifts_path
+      redirect_to users_path
     end
   end
 

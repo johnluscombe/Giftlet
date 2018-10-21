@@ -5,7 +5,6 @@
   padding: 15px;
   position: absolute;
   top: 68px;
-  width: 300px;
 
   a {
     color: black;
@@ -17,11 +16,6 @@
 
     .user-card {
       padding: 10px;
-
-      &.selected-user {
-        border-bottom: 5px solid #0275d8;
-        padding-bottom: 5px;
-      }
 
       .user-picture {
         border-radius: 20px;

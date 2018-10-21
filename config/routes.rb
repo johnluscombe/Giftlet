@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'logins#new'
 
-  resources :users, only: [:new, :create], shallow: true do
+  resources :users, only: [:index, :new, :create], shallow: true do
     resources :gifts, only: [:index, :create, :update, :destroy]
   end
 

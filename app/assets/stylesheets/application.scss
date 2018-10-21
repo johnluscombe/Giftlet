@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require_tree .
+ *= require tether
  *= require_self
  */
 @import "bootstrap";
@@ -60,10 +61,7 @@ button.close {
 }
 
 .content {
-  margin-left: 300px;
-  margin-right: 25px;
-  margin-top: 25px;
-  padding-left: 25px;
+  padding: 25px;
 }
 
 .delete-gift,
@@ -151,6 +149,14 @@ input#username {
   margin-bottom: 0;
 }
 
+.users-back {
+  margin-bottom: 1.2em;
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
 .version {
   color: gray;
   margin-bottom: 0;
@@ -179,6 +185,29 @@ td.new_account {
 
 body {
   font-family: 'Raleway', Helvetica, Arial, sans-serif;
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    right: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .content {
+    margin-left: 300px;
+  }
+
+  .sidebar {
+    width: 300px;
+
+    .user-card {
+      &.selected-user {
+        border-bottom: 5px solid #0275d8;
+        padding-bottom: 5px;
+      }
+    }
+  }
 }
 
 @media (min-width: 1200px) {

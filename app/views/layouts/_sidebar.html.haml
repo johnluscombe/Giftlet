@@ -1,10 +1,1 @@
-- @sidebar_users.each do |user|
-  = link_to user_gifts_path(user) do
-    - if user == @selected_user
-      .card.user-card.selected-user
-        = image_tag 'default_user.png', alt: 'User', class: 'user-picture'
-        %span.user-name= user.fullname
-    - else
-      .card.user-card
-        = image_tag 'default_user.png', alt: 'User', class: 'user-picture'
-        %span.user-name= user.fullname
+= render partial: 'layouts/sidebar_user', collection: @sidebar_users, as: :user
