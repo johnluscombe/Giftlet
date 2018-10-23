@@ -1,10 +1,10 @@
 %tr#new_gift
   %td
-    = f.text_field :name, class: 'form-control form-control-sm new-gift-name', placeholder: 'Name', required: true
-    = f.text_field :url, class: 'form-control form-control-sm new-gift-url', placeholder: 'URL (optional)'
-    = f.text_area :description, class: 'form-control form-control-sm new-gift-description', placeholder: 'Description (optional)'
+    = name_field(f)
+    = url_field(f)
+    = description_field(f)
   %td.edit-gift-container{ colspan: '2' }
-    = f.text_field :price_as_dollars, class: 'form-control form-control-sm new-gift-price', placeholder: 'Price'
+    = price_field(f)
     %span.save-cancel-buttons
-      = f.submit 'SAVE', class: 'btn btn-success btn-sm'
-      = link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-outline-danger btn-sm'
+      = submit_button(f)
+      = cancel_button

@@ -8,6 +8,7 @@ class UsersController < ApplicationController
   end
 
   def new
+    @hide_sidebar = true
     @user = User.new
   end
 

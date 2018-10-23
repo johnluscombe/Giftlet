@@ -1,15 +1,15 @@
-.modal.fade#editBasicInfoModal{ tabindex: '-1', role: 'dialog', 'aria-labelledby': 'editBasicInfoLabel', 'aria-hidden': 'true' }
+.modal.fade#editBasicInfoModal{ edit_basic_info_modal_options }
   .modal-dialog{ role: 'document' }
     .modal-content
       = render 'shared/errors', object: current_user
-      = form_for current_user, id: 'edit-basic-info-form', url: { controller: 'users', action: 'update_basic_information' }, html: {id: nil}, method: :patch do |f|
+      = form_for current_user, edit_basic_info_form_options do |f|
         .modal-header
-          %button.close{ type: 'button', 'data-dismiss': 'modal', 'aria-label': 'Close' }
+          %button.close{  }
             %span{ 'aria-hidden': 'true' } &times;
           %h4.modal-title#editBasicInfoLabel Edit Basic Information
         .modal-body
           .row
-            .col-xs-6= f.text_field :first_name, class: 'form-control', placeholder: 'First Name', required: true
-            .col-xs-6= f.text_field :last_name, class: 'form-control', placeholder: 'Last Name', required: true
+            .col-xs-6= first_name_field(f)
+            .col-xs-6= last_name_field(f)
         .modal-footer
-          = f.submit 'UPDATE', class: 'btn btn-success'
+          = submit_button(f, 'UPDATE')

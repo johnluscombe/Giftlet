@@ -7,15 +7,15 @@
     %col{ width: '200' }
     %col{ width: '200' }
     %tr
-      %td.new_account= f.text_field :first_name, class: 'form-control', placeholder: 'First Name', required: true
-      %td.new_account= f.text_field :last_name, class: 'form-control', placeholder: 'Last Name', required: true
+      %td.new_account= first_name_field(f)
+      %td.new_account= last_name_field(f)
     %tr
-      %td.new_account{ colspan: '2' }= f.text_field :username, class: 'form-control', placeholder: 'Username', required: true
+      %td.new_account{ colspan: '2' }= username_field(f)
     %tr
-      %td.new_account= f.password_field :password, class: 'form-control', placeholder: 'Password', required: true
-      %td.new_account= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Confirmation', required: true
+      %td.new_account= user_password_field(f)
+      %td.new_account= password_confirmation_field(f)
     %tr
-      %td.new_account{ colspan: '2' }= password_field_tag :site_passcode, nil, class: 'form-control', placeholder: 'Site Passcode', required: true
+      %td.new_account{ colspan: '2' }= site_passcode_field
   %br
-  = f.submit 'CREATE ACCOUNT', class: 'btn btn-success'
-  = link_to 'CANCEL', login_path, class: 'btn btn-outline-danger'
+  = submit_button(f, 'SUBMIT')
+  = cancel_button
