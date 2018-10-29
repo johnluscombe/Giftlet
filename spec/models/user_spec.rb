@@ -14,7 +14,6 @@ describe User do
   it { should respond_to(:password_digest) }
   it { should respond_to(:fullname) }
   it { should respond_to(:unpurchased_gifts) }
-  it { should respond_to(:amount_spent_on) }
   it { should respond_to(:gifts) }
 
   it { should be_valid }

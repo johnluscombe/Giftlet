@@ -30,23 +30,15 @@ module UsersHelper
   def password_confirmation_field(form)
     form.password_field(:password_confirmation,
                         class: 'form-control',
-                        placeholder: 'Password',
+                        placeholder: 'Password Confirmation',
                         required: true)
   end
 
-  def site_passcode_field
-    password_field_tag(:site_passcode,
-                       nil,
-                       class: 'form-control',
-                       placeholder: 'Site Passcode',
-                       required: true)
-  end
-
-  def submit_button(form, text)
+  def user_submit_button(form, text)
     form.submit text, class: 'btn btn-success'
   end
 
-  def cancel_button
+  def user_cancel_button
     link_to 'CANCEL', login_path, class: 'btn btn-outline-danger'
   end
 

@@ -54,7 +54,6 @@ describe 'Gift Pages' do
             end
 
             should have_css("a[href='#{ user_gifts_path(user, render_edit: user_gift.id) }']")
-            should_not have_content('Purchased')
           end
         end
       end
@@ -121,17 +120,17 @@ describe 'Gift Pages' do
 
             within(:css, "tr#gift_#{ user_gift.id }") do
               if !user_gift.purchased
-                should have_link('Mark as Purchased')
-                should_not have_link('Purchased by You')
-                should_not have_content("Purchased by #{ user.fullname }")
+                should have_link(href: gift_mark_as_purchased_path(user_gift.id))
+                should_not have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
+                should_not have_content(user.fullname)
               elsif user_gift.purchaser_id == user.id
-                should_not have_link('Mark as Purchased')
-                should have_link('Purchased by You')
-                should_not have_content("Purchased by #{ user.fullname }")
+                should_not have_link(href: gift_mark_as_purchased_path(user_gift.id))
+                should have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
+                should_not have_content(user.fullname)
               else
-                should_not have_link('Mark as Purchased')
-                should_not have_link('Purchased by You')
-                should have_content("Purchased by #{ third_user.fullname }")
+                should_not have_link(href: gift_mark_as_purchased_path(user_gift.id))
+                should_not have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
+                should have_content(third_user.fullname)
               end
             end
           end
@@ -398,9 +397,9 @@ describe 'Gift Pages' do
 
       it 'has the correct text' do
         within(:css, "tr#gift_#{ purchased_gift.id }") do
-          should_not have_link('Mark as Purchased')
-          should_not have_link('Purchased by You')
-          should have_selector('td', text: "Purchased by #{ third_user.fullname }")
+          should_not have_link(href: gift_mark_as_purchased_path(purchased_gift.id))
+          should_not have_link(href: gift_mark_as_unpurchased_path(purchased_gift.id))
+          should have_selector('td', text: third_user.fullname)
         end
       end
     end
@@ -410,24 +409,25 @@ describe 'Gift Pages' do
 
       it 'has the correct button' do
         within(:css, "tr#gift_#{ second_user_gift.id }") do
-          should have_link('Mark as Purchased')
-          should_not have_content('Purchased by You')
-          should_not have_selector('td', text: 'Purchased by')
+          should have_link(href: gift_mark_as_purchased_path(second_user_gift.id))
+          should_not have_link(href: gift_mark_as_unpurchased_path(second_user_gift.id))
         end
       end
 
       it 'changes the data' do
-        click_link 'Mark as Purchased'
+        click_link(href: gift_mark_as_purchased_path(second_user_gift.id))
         expect(second_user_gift.reload.purchased).to be(true)
         expect(second_user_gift.reload.purchaser_id).to eq(user.id)
       end
 
       it 'does not add a new gift to the system' do
-        expect { click_link 'Mark as Purchased' }.not_to change(Gift, :count)
+        expect do
+          click_link(href: gift_mark_as_purchased_path(second_user_gift.id))
+        end.not_to change(Gift, :count)
       end
 
       it 'redirects to user gifts page' do
-        click_link 'Mark as Purchased'
+        click_link(href: gift_mark_as_purchased_path(second_user_gift.id))
         should have_current_path(user_gifts_path(second_user))
       end
     end
@@ -437,9 +437,8 @@ describe 'Gift Pages' do
 
       it 'DOES NOT SHOW ANY PURCHASED INFORMATION' do
         within(:css, "tr#gift_#{ first_user_gift.id }") do
-          should_not have_link('Mark as Purchased')
-          should_not have_link('Purchased by You')
-          should_not have_selector('li', text: 'Purchased by')
+          should_not have_link(href: gift_mark_as_purchased_path(first_user_gift.id))
+          should_not have_link(href: gift_mark_as_unpurchased_path(first_user_gift.id))
         end
       end
     end
@@ -458,24 +457,25 @@ describe 'Gift Pages' do
 
     it 'has the correct button' do
       within(:css, "tr#gift_#{ gift_purchased_by_self.id }") do
-        should_not have_link('Mark as Purchased')
-        should have_link('Purchased by You')
-        should_not have_selector('Purchased by')
+        should_not have_link(href: gift_mark_as_purchased_path(gift_purchased_by_self.id))
+        should have_link(href: gift_mark_as_unpurchased_path(gift_purchased_by_self.id))
       end
     end
 
     it 'changes the data' do
-      click_link 'Purchased by You'
+      click_link(href: gift_mark_as_unpurchased_path(gift_purchased_by_self.id))
       expect(gift_purchased_by_self.reload.purchased).to be(false)
       expect(gift_purchased_by_self.reload.purchaser_id).to be(nil)
     end
 
     it 'does not add a new gift to the system' do
-      expect { click_link 'Purchased by You' }.not_to change(Gift, :count)
+      expect do
+        click_link(href: gift_mark_as_unpurchased_path(gift_purchased_by_self.id))
+      end.not_to change(Gift, :count)
     end
 
     it 'redirects top user gifts page' do
-      click_link 'Purchased by You'
+      click_link(href: gift_mark_as_unpurchased_path(gift_purchased_by_self.id))
       should have_current_path(user_gifts_path(second_user))
     end
   end

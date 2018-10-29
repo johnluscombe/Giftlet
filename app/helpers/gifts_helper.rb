@@ -81,11 +81,11 @@ module GiftsHelper
                     placeholder: 'Price')
   end
 
-  def submit_button(form)
+  def gift_submit_button(form)
     form.submit 'SAVE', class: 'btn btn-success btn-sm'
   end
 
-  def cancel_button
+  def gift_cancel_button
     link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-outline-danger btn-sm'
   end
 

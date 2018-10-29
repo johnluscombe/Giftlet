@@ -1,46 +1,48 @@
 class UsersController < ApplicationController
-  before_filter :ensure_user_logged_in, except: [:new, :create]
-  before_filter :ensure_user_not_logged_in, only: [:new, :create]
-  before_filter :ensure_passcode_exists, only: [:new, :create]
+  before_filter :ensure_user_logged_in, except: :create
+  before_filter :ensure_user_not_logged_in, only: :create
 
   def index
     @show_mobile_sidebar = true
   end
 
-  def new
-    @hide_sidebar = true
-    @user = User.new
-  end
-
   def create
     @user = User.new(safe_params)
-    if check_site_passcode(params[:site_passcode])
+
+    if ENV['ENABLE_SIGN_UP']
       if @user.save
         flash[:success] = 'Account created'
-        redirect_to login_path
       else
-        render 'new'
+        display_error(@user)
       end
+    else
+      flash[:danger] = 'Creating accounts has been disabled. Please contact your administrator.'
     end
+
+    redirect_to login_path
   end
 
   def update_basic_information
-    if current_user.update(safe_params)
+    user = User.find(current_user.id)
+
+    if user.update(safe_params)
       flash[:success] = 'Profile updated'
     else
-      flash[:danger] = 'There was an error saving'
+      display_error(user)
     end
 
     redirect_to :back
   end
 
   def update_password
-    old_password_correct = check_passwords(BCrypt::Password.new(current_user.password_digest), params[:old_password])
+    user = User.find(current_user.id)
+
+    old_password_correct = check_passwords(BCrypt::Password.new(user.password_digest), params[:old_password])
     if old_password_correct
-      if current_user.update(safe_params)
+      if user.update(safe_params)
         flash[:success] = 'Password updated'
       else
-        flash[:danger] = 'There was an error saving'
+        display_error(user)
       end
 
       redirect_to :back
@@ -78,18 +80,15 @@ class UsersController < ApplicationController
     end
   end
 
-  def check_site_passcode(passcode)
-    if passcode != ENV['SITE_PASSCODE']
-      flash.now[:danger] = 'Invalid site passcode'
-      render 'new'
-    end
-    passcode == ENV['SITE_PASSCODE']
-  end
+  def display_error(object)
+    if object.errors.any?
+      error_message = ''
 
-  def ensure_passcode_exists
-    if ENV['SITE_PASSCODE'].blank?
-      flash[:danger] = 'Site passcode not configured, please contact your administrator'
-      redirect_to login_path
+      object.errors.full_messages.each do |message|
+        error_message += message + "\n"
+      end
+
+      flash[:danger] = error_message
     end
   end
 end

@@ -25,6 +25,8 @@ describe LoginsController do
   end
 
   describe 'POST #create' do
+    before { set_http_referer(login_path) }
+
     describe 'with blank username' do
       before do
         post :create, username: '', password: 'password'
@@ -32,10 +34,6 @@ describe LoginsController do
 
       it 'does not log the user in' do
         expect(current_user).to be(nil)
-      end
-
-      it 'renders :new template' do
-        should render_template(:new)
       end
     end
 
@@ -47,10 +45,6 @@ describe LoginsController do
       it 'does not log the user in' do
         expect(current_user).to be(nil)
       end
-
-      it 'renders :new template' do
-        should render_template(:new)
-      end
     end
 
     describe 'with invalid username' do
@@ -61,10 +55,6 @@ describe LoginsController do
       it 'does not log the user in' do
         expect(current_user).to be(nil)
       end
-
-      it 'renders :new template' do
-        should render_template(:new)
-      end
     end
 
     describe 'with invalid password' do
@@ -74,10 +64,6 @@ describe LoginsController do
 
       it 'does not log the user in' do
         expect(current_user).to be(nil)
-      end
-
-      it 'renders :new template' do
-        should render_template(:new)
       end
     end
 

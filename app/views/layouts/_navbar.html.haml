@@ -40,5 +40,8 @@
     %span.tag.tag-warning.beta-tag-navbar.float-xs-left
       BETA
     %span.navbar-text.float-xs-right
-      %a.btn.btn-link.btn-login{ 'data-toggle': 'modal', 'data-target': '#loginModal' } Log In
-      = link_to 'Sign Up', new_user_path, class: 'btn btn-info'
+      - if @enable_sign_up
+        %a.btn.btn-link.btn-login{ 'data-toggle': 'modal', 'data-target': '#loginModal' } Log In
+        %a.btn.btn-info{ 'data-toggle': 'modal', 'data-target': '#newUserModal' } Sign Up
+      - else
+        %a.btn.btn-info{ 'data-toggle': 'modal', 'data-target': '#loginModal' } Log In

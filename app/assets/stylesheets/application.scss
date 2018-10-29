@@ -117,8 +117,10 @@ button.close {
   cursor: pointer;
 }
 
-input#username {
-  margin-bottom: 15px;
+#loginModal, #newUserModal, #editBasicInfoModal {
+  .row:not(:last-child) {
+    margin-bottom: 15px;
+  }
 }
 
 .mobile-public-image {
@@ -142,6 +144,7 @@ input#username {
 .new-gift-description {
   margin-bottom: 10px;
 }
+
 
 .small-text {
   color: #999999;

@@ -7,7 +7,9 @@
             %span{ 'aria-hidden': 'true' } &times;
           %h4.modal-title#loginModalLabel Log In
         .modal-body
-          = text_field_tag :username, params[:username], class: 'form-control', placeholder: 'Username'
-          = password_field_tag :password, params[:password], class: 'form-control', placeholder: 'Password'
+          .row
+            .col-xs-12= text_field_tag :username, params[:username], class: 'form-control', placeholder: 'Username'
+          .row
+            .col-xs-12= password_field_tag :password, params[:password], class: 'form-control', placeholder: 'Password'
         .modal-footer
           = submit_tag 'Log In', class: 'btn btn-secondary'

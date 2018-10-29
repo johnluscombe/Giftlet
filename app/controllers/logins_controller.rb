@@ -1,6 +1,8 @@
 class LoginsController < ApplicationController
   def new
+    @enable_sign_up = ENV['ENABLE_SIGN_UP']
     @hide_sidebar = true
+    @user = User.new
 
     if current_user
       redirect_to users_path
@@ -13,8 +15,8 @@ class LoginsController < ApplicationController
       session[:user_id] = user.id
       redirect_to users_path
     else
-      flash.now[:danger] = 'Invalid username or password'
-      render 'new'
+      flash[:danger] = 'Invalid username or password'
+      redirect_to :back
     end
   end
 
