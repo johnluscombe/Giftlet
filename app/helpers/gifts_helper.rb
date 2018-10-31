@@ -5,25 +5,20 @@ module GiftsHelper
 
   def purchased_by(gift)
     if gift.purchaser_id == current_user.id
-      link = purchased_by_you(gift)
-      content_tag(:div, link, class: 'text-xs-right')
+      purchased_by_you(gift)
     elsif gift.purchaser_id
-      text = purchased_by_other(gift)
-      content_tag(:div, text, class: 'text-success text-nowrap text-xs-right')
+      purchased_by_other(gift)
     else
-      text = purchased_by_nil(gift)
-      content_tag(:div, text, class: 'text-success text-xs-right')
+      purchased_by_nil
     end
   end
 
   def mark_as_purchased(gift)
-    link = link_to(gift_mark_as_purchased_path(gift),
+    link_to(gift_mark_as_purchased_path(gift),
             method: :patch, class: 'btn btn-sm btn-secondary') do
 
       content_tag(:i, nil, class: 'fa fa-check')
     end
-
-    content_tag(:div, link)
   end
 
   def gift_name(gift)
@@ -33,17 +28,25 @@ module GiftsHelper
       content = link_to gift.name, gift.full_url, target: '_blank'
     end
 
-    content_tag(:div, content)
+    content_tag(:span, content)
   end
 
   def gift_price(gift)
     if !gift.price.blank? and gift.price != 0.0
-      content_tag(:div, number_to_currency(gift.price))
+      content_tag(:span, number_to_currency(gift.price), class: 'gift-price')
+    end
+  end
+
+  def gift_description(gift)
+    if gift.description.delete(' ') == ''
+      content_tag(:i, 'No description provided.', class: 'text-muted')
+    else
+      gift.description
     end
   end
 
   def gift_edit(gift)
-    link_to user_gifts_path(@user, render_edit: gift.id) do
+    link_to user_gifts_path(@user, render_edit: gift.id), class: 'btn btn-sm btn-secondary' do
       content_tag(:i, nil, class: 'fa fa-cog', 'aria-hidden': 'true')
     end
   end
@@ -51,21 +54,21 @@ module GiftsHelper
   def gift_delete(gift)
     confirm_text = 'Are you sure you want to delete this gift?'
 
-    link_to gift_path(gift), method: :delete, data: { confirm: confirm_text } do
+    link_to gift_path(gift), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: confirm_text } do
       content_tag(:i, nil, class: 'fa fa-trash', 'aria-hidden': 'true')
     end
   end
 
   def name_field(form)
     form.text_field(:name,
-                    class: 'form-control form-control-sm',
+                    class: 'form-control form-control-sm gift-name-field',
                     placeholder: 'Name',
                     required: true)
   end
 
   def url_field(form)
     form.text_field(:url,
-                    class: 'form-control form-control-sm',
+                    class: 'form-control form-control-sm gift-url-field',
                     placeholder: 'URL (optional)')
   end
 
@@ -77,16 +80,20 @@ module GiftsHelper
 
   def price_field(form)
     form.text_field(:price_as_dollars,
-                    class: 'form-control form-control-sm',
+                    class: 'form-control form-control-sm gift-price-field',
                     placeholder: 'Price')
   end
 
-  def gift_submit_button(form)
-    form.submit 'SAVE', class: 'btn btn-success btn-sm'
+  def gift_submit_button
+    button_tag class: 'btn btn-primary btn-sm' do
+      content_tag(:i, nil, class: 'fa fa-save')
+    end
   end
 
   def gift_cancel_button
-    link_to 'CANCEL', user_gifts_path(@user), class: 'btn btn-outline-danger btn-sm'
+    link_to user_gifts_path(@user), class: 'btn btn-secondary btn-sm' do
+      content_tag(:i, nil, class: 'fa fa-times')
+    end
   end
 
   private
@@ -101,10 +108,11 @@ module GiftsHelper
 
   def purchased_by_other(gift)
     text = "#{ gift.purchaser.first_name } #{ gift.purchaser.last_name }"
-    content_tag(:i, nil, class: 'fa fa-check') + text
+    icon = content_tag(:i, nil, class: 'fa fa-check')
+    content_tag(:span, icon + text, class: 'text-success text-nowrap')
   end
 
-  def purchased_by_nil(gift)
-    content_tag(:i, 'Purchased', class: 'fa fa-check')
+  def purchased_by_nil
+    content_tag(:i, 'Purchased', class: 'fa fa-check text-success')
   end
 end

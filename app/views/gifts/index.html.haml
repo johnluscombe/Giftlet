@@ -13,34 +13,25 @@
   - if @user == current_user
     - if params[:render_new]
       = form_for [@user, @gift] do |form|
-        %table.table
-          = render 'column_widths'
-          = render partial: 'gift', collection: @gifts, locals: { f: form }
-          = render partial: 'new', locals: { f: form }
+        = render partial: 'gift', collection: @gifts, locals: { f: form }
+        = render partial: 'fields', locals: { f: form }
     - elsif params[:render_edit]
       = form_for @gift do |form|
-        %table.table
-          = render 'column_widths'
-          = render partial: 'gift', collection: @gifts, locals: { f: form }
+        = render partial: 'gift', collection: @gifts, locals: { f: form }
     - else
-      %table.table
-        = render 'column_widths'
-        = render @gifts
-      = link_to 'ADD NEW GIFT', user_gifts_path(@user, render_new: true), class: 'btn btn-success'
+      = render @gifts
+      = render partial: 'new_gift_button'
 
   - else
-    %table.table
-      = render 'column_widths'
-      = render @gifts
+    = render @gifts
 - elsif @user == current_user
   - if params[:render_new]
     = form_for [@user, @gift] do |form|
-      %table.table
-        = render 'column_widths'
-        = render partial: 'gift', collection: @gifts, locals: { f: form }
-        = render partial: 'new', locals: { f: form }
+      = render partial: 'gift', collection: @gifts, locals: { f: form }
+      = render partial: 'fields', locals: { f: form }
   - else
     %p You have not added any gifts yet!
-    = link_to 'ADD NEW GIFT', user_gifts_path(@user, render_new: true), class: 'btn btn-success'
+    = render partial: 'new_gift_button'
+
 - else
   %p #{@user.first_name} has not added any gifts yet!

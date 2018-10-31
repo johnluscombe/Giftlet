@@ -1,21 +1,21 @@
 - if editing(gift)
-  = render partial: 'edit', locals: { f: f, gift: gift }
+  = render partial: 'fields', locals: { f: f, gift: gift }
 - else
-  %tr[gift]
-    %td
+  .card
+    .card-header
       = gift_name(gift)
-      = gift.description
 
-    %td.text-xs-right= gift_price(gift)
+      %span.float-xs-right
+        = gift_price(gift)
 
-    - if @user != current_user
-      - if gift.purchased
-        %td= purchased_by(gift)
+        - if @user != current_user
+          - if gift.purchased
+            = purchased_by(gift)
+          - else
+            = mark_as_purchased(gift)
+        - else
+          = gift_edit(gift)
+          = gift_delete(gift)
 
-      - else
-        %td.text-xs-right= mark_as_purchased(gift)
-
-    - else
-      %td.text-xs-right
-        = gift_edit(gift)
-        = gift_delete(gift)
+    .card-body
+      = gift_description(gift)

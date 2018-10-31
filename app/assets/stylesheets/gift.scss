@@ -1,0 +1,23 @@
+.edit-gift {
+  display: flex;
+
+  input, button {
+    margin-right: 5px;
+  }
+
+  .gift-name-field {
+    flex-grow: 1;
+  }
+
+  .gift-price-field {
+    width: 100px;
+  }
+}
+
+.gift-price {
+  margin-right: 8px;
+}
+
+.add-gift:hover {
+  text-decoration: none;
+}
