@@ -8,11 +8,6 @@
         %a.nav-link.dropdown-toggle{ href: '#', id: 'navbar-dropdown', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' }
           = current_user.fullname
         .dropdown-menu.dropdown-menu-right{ 'aria-labelledby': 'navbar-dropdown' }
-          = link_to user_gifts_path(current_user), class: 'dropdown-item' do
-            %i.fa.fa-list
-            &nbsp;
-            View Your Gifts
-          .dropdown-divider
           %a.dropdown-item.hand-icon{ 'data-toggle': 'modal', 'data-target': '#editBasicInfoModal' }
             %i.fa.fa-user
             &nbsp;
@@ -41,7 +36,7 @@
       BETA
     %span.navbar-text.float-xs-right
       - if @enable_sign_up
-        %a.btn.btn-link.btn-login{ 'data-toggle': 'modal', 'data-target': '#loginModal' } Log In
+        %a.btn.btn-link{ 'data-toggle': 'modal', 'data-target': '#loginModal' } Log In
         %a.btn.btn-info{ 'data-toggle': 'modal', 'data-target': '#newUserModal' } Sign Up
       - else
         %a.btn.btn-info{ 'data-toggle': 'modal', 'data-target': '#loginModal' } Log In

@@ -10,14 +10,17 @@
   %body
     = render 'layouts/navbar'
 
-    - if @hide_sidebar
-      = render 'layouts/content'
-    - else
-      - if @show_mobile_sidebar
-        .sidebar
-          = render 'layouts/sidebar'
-      - else
-        .sidebar.hidden-sm-down
-          = render 'layouts/sidebar'
-      .content
+    .main
+      - if @hide_sidebar
         = render 'layouts/content'
+      - else
+        - if @show_mobile_sidebar
+          .sidebar
+            = render 'layouts/sidebar'
+          .content.hidden-sm-down
+            = render 'layouts/content'
+        - else
+          .sidebar.hidden-sm-down
+            = render 'layouts/sidebar'
+          .content
+            = render 'layouts/content'

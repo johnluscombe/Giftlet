@@ -77,7 +77,7 @@ module GiftsHelper
 
   def price_field(form)
     form.text_field(:price_as_dollars,
-                    class: 'form-control form-control-sm edit-gift-price',
+                    class: 'form-control form-control-sm',
                     placeholder: 'Price')
   end
 

@@ -3,8 +3,7 @@
     = name_field(f)
     = url_field(f)
     = description_field(f)
-  %td.edit-gift-container{ colspan: '2' }
+  %td{ colspan: '2' }
     = price_field(f)
-    %span.save-cancel-buttons
-      = gift_submit_button(f)
-      = gift_cancel_button
+    = gift_submit_button(f)
+    = gift_cancel_button
