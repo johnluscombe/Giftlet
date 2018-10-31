@@ -9,29 +9,20 @@
   %h1 #{@user.first_name}'s Gifts
 
 %br
-- if @gifts.count > 0
-  - if @user == current_user
-    - if params[:render_new]
-      = form_for [@user, @gift] do |form|
-        = render partial: 'gift', collection: @gifts, locals: { f: form }
-        = render partial: 'fields', locals: { f: form }
-    - elsif params[:render_edit]
-      = form_for @gift do |form|
-        = render partial: 'gift', collection: @gifts, locals: { f: form }
-    - else
-      = render @gifts
-      = render partial: 'new_gift_button'
-
-  - else
-    = render @gifts
-- elsif @user == current_user
-  - if params[:render_new]
-    = form_for [@user, @gift] do |form|
-      = render partial: 'gift', collection: @gifts, locals: { f: form }
-      = render partial: 'fields', locals: { f: form }
-  - else
-    %p You have not added any gifts yet!
-    = render partial: 'new_gift_button'
-
+- if params[:render_new]
+  = form_for [@user, @gift] do |form|
+    = render partial: 'gift', collection: @gifts, locals: { f: form }
+    = render partial: 'fields', locals: { f: form }
+- elsif params[:render_edit]
+  = form_for @gift do |form|
+    = render partial: 'gift', collection: @gifts, locals: { f: form }
 - else
-  %p #{@user.first_name} has not added any gifts yet!
+  - if @gifts.count > 0
+    = render @gifts
+  - elsif @user == current_user
+    %p You have not added any gifts yet!
+  - else
+    %p #{@user.first_name} has not added any gifts yet!
+
+  - if @user == current_user
+    = render partial: 'new_gift_button'
