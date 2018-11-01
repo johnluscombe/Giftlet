@@ -33,7 +33,7 @@ describe 'Gift Pages' do
     describe 'when logged in' do
       before do
         login user
-        click_link 'View Your Gifts'
+        visit user_gifts_path(user)
       end
 
       it 'allows access' do
@@ -42,27 +42,23 @@ describe 'Gift Pages' do
 
       it "lists current user's gifts" do
         Gift.where(user_id: user.id).each do |user_gift|
-          within(:css, 'table') do
-            should have_content(user_gift.name)
-            should have_content(user_gift.price)
-            should have_content(user_gift.description)
+          should have_content(user_gift.name)
+          should have_content(user_gift.price)
+          should have_content(user_gift.description)
 
-            if user_gift.url.nil?
-              should_not have_link(user_gift.name)
-            else
-              should have_link(user_gift.name)
-            end
-
-            should have_css("a[href='#{ user_gifts_path(user, render_edit: user_gift.id) }']")
+          if user_gift.url.nil?
+            should_not have_link(user_gift.name)
+          else
+            should have_link(user_gift.name)
           end
+
+          should have_css("a[href='#{ user_gifts_path(user, render_edit: user_gift.id) }']")
         end
       end
 
       it "does not list other user's gifts" do
         Gift.where.not(user_id: user.id).each do |other_user_gift|
-          within(:css, 'table') do
-            should_not have_content(other_user_gift.name)
-          end
+          should_not have_content(other_user_gift.name)
         end
       end
     end
@@ -105,33 +101,31 @@ describe 'Gift Pages' do
 
       it "lists expected user's gifts" do
         Gift.where(user_id: second_user.id).each do |user_gift|
-          within(:css, 'table') do
-            should have_content(user_gift.name)
-            should have_content(user_gift.price)
-            should have_content(user_gift.description)
+          should have_content(user_gift.name)
+          should have_content(user_gift.price)
+          should have_content(user_gift.description)
 
-            if user_gift.url.nil?
-              should_not have_link(user_gift.name)
+          if user_gift.url.nil?
+            should_not have_link(user_gift.name)
+          else
+            should have_link(user_gift.name)
+          end
+
+          should_not have_css("a[href='#{ user_gifts_path(user, render_edit: user_gift.id) }']")
+
+          within(:css, "#gift_#{ user_gift.id }") do
+            if !user_gift.purchased
+              should have_link(href: gift_mark_as_purchased_path(user_gift.id))
+              should_not have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
+              should_not have_content(user.fullname)
+            elsif user_gift.purchaser_id == user.id
+              should_not have_link(href: gift_mark_as_purchased_path(user_gift.id))
+              should have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
+              should_not have_content(user.fullname)
             else
-              should have_link(user_gift.name)
-            end
-
-            should_not have_css("a[href='#{ user_gifts_path(user, render_edit: user_gift.id) }']")
-
-            within(:css, "tr#gift_#{ user_gift.id }") do
-              if !user_gift.purchased
-                should have_link(href: gift_mark_as_purchased_path(user_gift.id))
-                should_not have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
-                should_not have_content(user.fullname)
-              elsif user_gift.purchaser_id == user.id
-                should_not have_link(href: gift_mark_as_purchased_path(user_gift.id))
-                should have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
-                should_not have_content(user.fullname)
-              else
-                should_not have_link(href: gift_mark_as_purchased_path(user_gift.id))
-                should_not have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
-                should have_content(third_user.fullname)
-              end
+              should_not have_link(href: gift_mark_as_purchased_path(user_gift.id))
+              should_not have_link(href: gift_mark_as_unpurchased_path(user_gift.id))
+              should have_content(third_user.fullname)
             end
           end
         end
@@ -139,9 +133,7 @@ describe 'Gift Pages' do
 
       it "does not list other user's gifts" do
         Gift.where.not(user_id: second_user.id).each do |other_user_gift|
-          within(:css, 'table') do
-            should_not have_content(other_user_gift.name)
-          end
+          should_not have_content(other_user_gift.name)
         end
       end
     end
@@ -149,9 +141,6 @@ describe 'Gift Pages' do
 
   describe 'creating new gift' do
     describe 'with no prior gift' do
-      let(:submit) { 'SAVE' }
-      let(:cancel) { 'CANCEL' }
-
       describe 'when not logged in' do
         before { visit user_gifts_path(user, render_new: true) }
 
@@ -167,28 +156,33 @@ describe 'Gift Pages' do
         end
 
         it 'should not render new gift form' do
-          should_not have_selector('tr#new_gift')
+          should_not have_selector('.gift-form')
         end
 
-        it 'should not have "ADD NEW GIFT" button' do
-          should_not have_link('ADD NEW GIFT')
+        it 'should not have "ADD GIFT" button' do
+          should_not have_selector('a#add-gift')
         end
       end
 
       describe 'when logged in' do
         before do
           login user
-          click_link 'View Your Gifts'
-          click_link 'ADD NEW GIFT'
+          visit user_gifts_path(user, render_new: true)
         end
 
         describe 'with invalid name' do
           it 'does not add the gift to the system' do
-            expect { click_button submit }.not_to change(Gift, :count)
+            expect do
+              within(:css, '#new-gift') do
+                find('.gift-save').click
+              end
+            end.not_to change(Gift, :count)
           end
 
           it 'redirects to new view' do
-            click_button submit
+            within(:css, '#new-gift') do
+              find('.gift-save').click
+            end
             should have_current_path(user_gifts_path(user, render_new: true))
           end
         end
@@ -197,22 +191,34 @@ describe 'Gift Pages' do
           before { fill_in 'gift_name', with: 'New Gift' }
 
           it 'adds the gift to the system' do
-            expect { click_button submit }.to change(Gift, :count).by(1)
+            expect do
+              within(:css, '#new-gift') do
+                find('.gift-save').click
+              end
+            end.to change(Gift, :count).by(1)
           end
 
           it 'redirects to new view' do
-            click_button submit
+            within(:css, '#new-gift') do
+              find('.gift-save').click
+            end
             should have_current_path(user_gifts_path(user, render_new: true))
           end
         end
 
         describe 'clicking cancel' do
           it 'does not add the gift to the system' do
-            expect { click_link cancel }.not_to change(Gift, :count)
+            expect do
+              within(:css, '#new-gift') do
+                find('.gift-cancel').click
+              end
+            end.not_to change(Gift, :count)
           end
 
           it 'redirects to user gifts page' do
-            click_link cancel
+            within(:css, '#new-gift') do
+              find('.gift-cancel').click
+            end
             should have_current_path(user_gifts_path(user))
           end
         end
@@ -220,9 +226,6 @@ describe 'Gift Pages' do
     end
 
     describe 'with a prior gift' do
-      let(:submit) { 'SAVE' }
-      let(:cancel) { 'CANCEL' }
-
       before { FactoryGirl.create(:gift, user: user) }
 
       describe 'when not logged in' do
@@ -240,28 +243,33 @@ describe 'Gift Pages' do
         end
 
         it 'should not render new gift form' do
-          should_not have_selector('tr#new_gift')
+          should_not have_selector('.gift-form')
         end
 
-        it 'should not have "ADD NEW GIFT" button' do
-          should_not have_link('ADD NEW GIFT')
+        it 'should not have "ADD GIFT" button' do
+          should_not have_selector('a#add-gift')
         end
       end
 
       describe 'when logged in' do
         before do
           login user
-          click_link 'View Your Gifts'
-          click_link 'ADD NEW GIFT'
+          visit user_gifts_path(user, render_new: true)
         end
 
         describe 'with invalid name' do
           it 'does not add the gift to the system' do
-            expect { click_button submit }.not_to change(Gift, :count)
+            expect do
+              within(:css, '#new-gift') do
+                find('.gift-save').click
+              end
+            end.not_to change(Gift, :count)
           end
 
           it 'redirects to new view' do
-            click_button submit
+            within(:css, '#new-gift') do
+              find('.gift-save').click
+            end
             should have_current_path(user_gifts_path(user, render_new: true))
           end
         end
@@ -270,22 +278,34 @@ describe 'Gift Pages' do
           before { fill_in 'gift_name', with: 'New Gift' }
 
           it 'adds the gift to the system' do
-            expect { click_button submit }.to change(Gift, :count).by(1)
+            expect do
+              within(:css, '#new-gift') do
+                find('.gift-save').click
+              end
+            end.to change(Gift, :count).by(1)
           end
 
           it 'redirects to new view' do
-            click_button submit
+            within(:css, '#new-gift') do
+              find('.gift-save').click
+            end
             should have_current_path(user_gifts_path(user, render_new: true))
           end
         end
 
         describe 'clicking cancel' do
           it 'does not add the gift to the system' do
-            expect { click_link cancel }.not_to change(Gift, :count)
+            expect do
+              within(:css, '#new-gift') do
+                find('.gift-cancel').click
+              end
+            end.not_to change(Gift, :count)
           end
 
           it 'redirects to user gifts page' do
-            click_link cancel
+            within(:css, '#new-gift') do
+              find('.gift-cancel').click
+            end
             should have_current_path(user_gifts_path(user))
           end
         end
@@ -294,8 +314,6 @@ describe 'Gift Pages' do
   end
 
   describe 'editing gift' do
-    let(:submit) { 'SAVE' }
-    let(:cancel) { 'CANCEL' }
     let!(:new_gift) { FactoryGirl.create(:gift, user: user) }
     let!(:other_user_gift) { FactoryGirl.create(:gift, user: second_user) }
 
@@ -314,10 +332,10 @@ describe 'Gift Pages' do
       end
 
       it 'should not render edit gift form' do
-        should_not have_selector('tr#edit_gift')
+        should_not have_selector('#edit_gift')
       end
 
-      it 'should not have "ADD NEW GIFT" button' do
+      it 'should not have "ADD GIFT" button' do
         should_not have_link('', href: user_gifts_path(second_user, render_edit: other_user_gift.id))
       end
     end
@@ -325,22 +343,25 @@ describe 'Gift Pages' do
     describe 'when logged in' do
       before do
         login user
-        click_link 'View Your Gifts'
-        within(:css, "tr#gift_#{ new_gift.id }") do
-          click_link('', href: user_gifts_path(user, render_edit: new_gift.id))
-        end
+        visit user_gifts_path(user, render_edit: new_gift.id)
       end
 
       describe 'with invalid name' do
         before { fill_in 'gift_name', with: '' }
 
         it 'does not change the data' do
-          click_button submit
+          within(:css, '#edit-gift') do
+            find('.gift-save').click
+          end
           expect(new_gift.name).to eq(new_gift.name)
         end
 
         it 'does not add a new gift to the system' do
-          expect { click_button submit }.not_to change(Gift, :count)
+          expect do
+            within(:css, '#edit-gift') do
+              find('.gift-save').click
+            end
+          end.not_to change(Gift, :count)
         end
       end
 
@@ -348,16 +369,24 @@ describe 'Gift Pages' do
         before { fill_in 'gift_name', with: 'newname' }
 
         it 'changes the data' do
-          click_button submit
+          within(:css, '#edit-gift') do
+            find('.gift-save').click
+          end
           expect(new_gift.name).not_to eq(new_gift.reload.name)
         end
 
         it 'does not add a new gift to the system' do
-          expect { click_button submit }.not_to change(Gift, :count)
+          expect do
+            within(:css, '#edit-gift') do
+              find('.gift-save').click
+            end
+          end.not_to change(Gift, :count)
         end
 
         it 'redirects to user gifts page' do
-          click_button submit
+          within(:css, '#edit-gift') do
+            find('.gift-save').click
+          end
           should have_current_path(user_gifts_path(user))
         end
       end
@@ -366,16 +395,18 @@ describe 'Gift Pages' do
         before { fill_in 'gift_name', with: 'newname' }
 
         it 'does not change the data' do
-          click_link cancel
+          within(:css, '#edit-gift') do
+            find('.gift-cancel').click
+          end
           expect(new_gift.name).to eq(new_gift.name)
         end
 
         it 'does not add a new gift to the system' do
-          expect { click_button submit }.not_to change(Gift, :count)
+          expect { find('.gift-save').click }.not_to change(Gift, :count)
         end
 
         it 'redirects to user gifts page' do
-          click_button submit
+          find('.gift-save').click
           should have_current_path(user_gifts_path(user))
         end
       end
@@ -396,10 +427,10 @@ describe 'Gift Pages' do
       before { visit user_gifts_path(second_user) }
 
       it 'has the correct text' do
-        within(:css, "tr#gift_#{ purchased_gift.id }") do
+        within(:css, "#gift_#{ purchased_gift.id }") do
           should_not have_link(href: gift_mark_as_purchased_path(purchased_gift.id))
           should_not have_link(href: gift_mark_as_unpurchased_path(purchased_gift.id))
-          should have_selector('td', text: third_user.fullname)
+          should have_selector('span', text: third_user.fullname)
         end
       end
     end
@@ -408,7 +439,7 @@ describe 'Gift Pages' do
       before { visit user_gifts_path(second_user) }
 
       it 'has the correct button' do
-        within(:css, "tr#gift_#{ second_user_gift.id }") do
+        within(:css, "#gift_#{ second_user_gift.id }") do
           should have_link(href: gift_mark_as_purchased_path(second_user_gift.id))
           should_not have_link(href: gift_mark_as_unpurchased_path(second_user_gift.id))
         end
@@ -436,7 +467,7 @@ describe 'Gift Pages' do
       before { visit user_gifts_path(user) }
 
       it 'DOES NOT SHOW ANY PURCHASED INFORMATION' do
-        within(:css, "tr#gift_#{ first_user_gift.id }") do
+        within(:css, "#gift_#{ first_user_gift.id }") do
           should_not have_link(href: gift_mark_as_purchased_path(first_user_gift.id))
           should_not have_link(href: gift_mark_as_unpurchased_path(first_user_gift.id))
         end
@@ -456,7 +487,7 @@ describe 'Gift Pages' do
     end
 
     it 'has the correct button' do
-      within(:css, "tr#gift_#{ gift_purchased_by_self.id }") do
+      within(:css, "#gift_#{ gift_purchased_by_self.id }") do
         should_not have_link(href: gift_mark_as_purchased_path(gift_purchased_by_self.id))
         should have_link(href: gift_mark_as_unpurchased_path(gift_purchased_by_self.id))
       end
@@ -485,7 +516,7 @@ describe 'Gift Pages' do
 
     before do
       login user
-      click_link 'View Your Gifts'
+      visit user_gifts_path(user)
     end
 
     it 'removes the gift from the system' do

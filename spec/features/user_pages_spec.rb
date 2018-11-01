@@ -29,17 +29,11 @@ describe 'User Pages' do
         should have_current_path(users_path)
       end
 
-      it 'lists the other recipients' do
-        User.where.not(id: user.id).each do |other_user|
+      it 'lists all recipients' do
+        User.all.each do |other_user|
           within(:css, '.sidebar') do
             should have_content(other_user.fullname)
           end
-        end
-      end
-
-      it 'does not list the current user' do
-        within(:css, '.sidebar') do
-          should_not have_content(user.fullname)
         end
       end
     end

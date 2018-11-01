@@ -54,7 +54,6 @@ describe 'Navbar' do
         should have_content('BETA')
 
         within(:css, 'div.dropdown-menu') do
-          should have_link('View Your Gifts', href: user_gifts_path(user))
           should have_content('Edit Basic Information')
           should have_content('Change Password')
           should have_link('About Giftlet', href: about_path)

@@ -3,26 +3,26 @@
     %i.fa.fa-chevron-left
     Users
 
-- if @user == current_user
+- if current_user?(@user)
   %h1 Your Gifts
 - else
   %h1 #{@user.first_name}'s Gifts
 
 %br
-- if params[:render_new]
+- if params[:render_new] and current_user?(@user)
   = form_for [@user, @gift] do |form|
     = render partial: 'gift', collection: @gifts, locals: { f: form }
-    = render partial: 'fields', locals: { f: form }
-- elsif params[:render_edit]
+    #new-gift= render partial: 'fields', locals: { f: form }
+- elsif params[:render_edit] and current_user?(@user)
   = form_for @gift do |form|
     = render partial: 'gift', collection: @gifts, locals: { f: form }
 - else
   - if @gifts.count > 0
     = render @gifts
-  - elsif @user == current_user
+  - elsif current_user?(@user)
     %p You have not added any gifts yet!
   - else
     %p #{@user.first_name} has not added any gifts yet!
 
-  - if @user == current_user
-    = render partial: 'new_gift_button'
+  - if current_user?(@user)
+    = add_gift_button

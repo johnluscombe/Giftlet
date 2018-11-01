@@ -1,6 +1,6 @@
 module GiftsHelper
   def editing(gift)
-    @user == current_user and params[:render_edit].to_i == gift.id
+    current_user?(@user) and params[:render_edit].to_i == gift.id
   end
 
   def purchased_by(gift)
@@ -38,7 +38,7 @@ module GiftsHelper
   end
 
   def gift_description(gift)
-    if gift.description.delete(' ') == ''
+    if gift.description.nil? or gift.description.delete(' ') == ''
       content_tag(:i, 'No description provided.', class: 'text-muted')
     else
       gift.description
@@ -47,7 +47,7 @@ module GiftsHelper
 
   def gift_edit(gift)
     link_to user_gifts_path(@user, render_edit: gift.id), class: 'btn btn-sm btn-secondary' do
-      content_tag(:i, nil, class: 'fa fa-cog', 'aria-hidden': 'true')
+      content_tag(:i, nil, class: 'fa fa-pencil', 'aria-hidden': 'true')
     end
   end
 
@@ -56,6 +56,12 @@ module GiftsHelper
 
     link_to gift_path(gift), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: confirm_text } do
       content_tag(:i, nil, class: 'fa fa-trash', 'aria-hidden': 'true')
+    end
+  end
+
+  def add_gift_button
+    link_to user_gifts_path(@user, render_new: true), class: 'btn btn-outline-success btn-block' do
+      content_tag(:i, nil, class: 'fa fa-plus') + 'ADD GIFT'
     end
   end
 
@@ -85,13 +91,13 @@ module GiftsHelper
   end
 
   def gift_submit_button
-    button_tag class: 'btn btn-primary btn-sm' do
+    button_tag class: 'btn btn-primary btn-sm gift-save' do
       content_tag(:i, nil, class: 'fa fa-save')
     end
   end
 
   def gift_cancel_button
-    link_to user_gifts_path(@user), class: 'btn btn-secondary btn-sm' do
+    link_to user_gifts_path(@user), class: 'btn btn-secondary btn-sm gift-cancel' do
       content_tag(:i, nil, class: 'fa fa-times')
     end
   end

@@ -1,7 +1,7 @@
 - if editing(gift)
-  = render partial: 'fields', locals: { f: f, gift: gift }
+  #edit-gift= render partial: 'fields', locals: { f: f, gift: gift }
 - else
-  .card
+  .card[gift]
     .card-header
       = gift_name(gift)
 

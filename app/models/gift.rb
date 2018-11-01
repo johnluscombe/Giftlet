@@ -25,6 +25,7 @@ class Gift < ActiveRecord::Base
   end
 
   def price_as_dollars=(value)
+    value = value.to_s.sub('$', '').to_f
     self.price = value
     self.save
   end

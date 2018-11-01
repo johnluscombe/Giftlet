@@ -49,7 +49,7 @@ describe GiftsController do
         it 'does not render new gift form' do
           direct_login(user)
           get :index, user_id: other_user, render_new: true
-          should_not render_template(partial: '_new')
+          should_not render_template(partial: '_fields')
         end
       end
 
@@ -57,7 +57,7 @@ describe GiftsController do
         it 'renders new gift form' do
           direct_login(user)
           get :index, user_id: user, render_new: true
-          should render_template(partial: '_new')
+          should render_template(partial: '_fields')
         end
       end
     end
@@ -74,7 +74,7 @@ describe GiftsController do
         it 'does not render edit gift form' do
           direct_login(user)
           get :index, user_id: other_user, render_edit: other_user_gift.id
-          should_not render_template(partial: '_edit')
+          should_not render_template(partial: '_fields')
         end
       end
 
@@ -82,7 +82,7 @@ describe GiftsController do
         it 'renders edit gift form' do
           direct_login(user)
           get :index, user_id: user, render_edit: gift.id
-          should render_template(partial: '_edit')
+          should render_template(partial: '_fields')
         end
       end
     end
