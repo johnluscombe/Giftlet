@@ -75,7 +75,7 @@ class GiftsController < ApplicationController
       @user = @gift.user
     end
 
-    unless current_user?(@user)
+    unless can_edit_gift?(@user)
       redirect_to users_path
     end
   end
@@ -94,8 +94,14 @@ class GiftsController < ApplicationController
     @recipient = @gift.user
     @purchaser = User.find(@gift.purchaser_id)
 
-    unless current_user?(@purchaser)
+    unless can_edit_gift?(@purchaser)
       redirect_to user_gifts_path(@recipient)
     end
+  end
+
+  private
+
+  def can_edit_gift?(user)
+    current_user?(user) or current_user.site_admin?
   end
 end

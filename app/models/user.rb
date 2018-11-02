@@ -17,4 +17,8 @@ class User < ActiveRecord::Base
   def unpurchased_gifts
     self.gifts.where(purchased: [false, nil])
   end
+
+  def site_admin?
+    self.is_site_admin
+  end
 end

@@ -1,6 +1,10 @@
 module GiftsHelper
+  def can_edit_gift?
+    current_user?(@user) or current_user.site_admin?
+  end
+
   def editing(gift)
-    current_user?(@user) and params[:render_edit].to_i == gift.id
+    can_edit_gift? and params[:render_edit].to_i == gift.id
   end
 
   def purchased_by(gift)
@@ -115,7 +119,15 @@ module GiftsHelper
   def purchased_by_other(gift)
     text = "#{ gift.purchaser.first_name } #{ gift.purchaser.last_name }"
     icon = content_tag(:i, nil, class: 'fa fa-check')
-    content_tag(:span, icon + text, class: 'text-success text-nowrap')
+
+    if current_user.site_admin?
+      link_to gift_mark_as_unpurchased_path(gift),
+              method: :patch, class: 'btn btn-sm btn-outline-success' do
+        icon + text
+      end
+    else
+      content_tag(:span, icon + text, class: 'text-success text-nowrap')
+    end
   end
 
   def purchased_by_nil
