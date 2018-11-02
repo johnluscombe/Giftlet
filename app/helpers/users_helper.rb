@@ -118,4 +118,14 @@ module UsersHelper
                 class: 'btn btn-success',
                 disabled: true)
   end
+
+  def clear_purchased_gifts_button
+    confirm_text = 'Are you sure you want to clear purchased gifts for this user?'
+    icon = content_tag(:i, nil, class: 'fa fa-ban', 'aria-hidden': 'true')
+    text = content_tag(:span, 'Clear Purchased', class: 'hidden-xs-down')
+
+    link_to user_clear_purchased_gifts_path(@user), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: confirm_text } do
+      icon + text
+    end
+  end
 end

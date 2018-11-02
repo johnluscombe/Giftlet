@@ -124,6 +124,14 @@ body {
   font-family: 'Raleway', Helvetica, Arial, sans-serif;
 }
 
+@media (max-width: 565px) {
+  .purchased-static {
+    .fa-check {
+      padding: 0 8px;
+    }
+  }
+}
+
 @media (max-width: 767px) {
   .sidebar, .sidebar-background {
     width: 100%;

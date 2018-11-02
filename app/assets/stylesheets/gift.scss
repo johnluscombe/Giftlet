@@ -1,3 +1,16 @@
+.gift-header {
+  display: flex;
+  align-items: center;
+
+  h1 {
+    flex-grow: 1;
+  }
+
+  span {
+    margin-left: 5px;
+  }
+}
+
 #edit-gift, #new-gift {
   .card-header {
     display: flex;

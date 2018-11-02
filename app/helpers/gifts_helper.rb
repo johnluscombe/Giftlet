@@ -118,15 +118,16 @@ module GiftsHelper
 
   def purchased_by_other(gift)
     text = "#{ gift.purchaser.first_name } #{ gift.purchaser.last_name }"
+    text_node = content_tag(:span, text, class: 'hidden-xs-down')
     icon = content_tag(:i, nil, class: 'fa fa-check')
 
     if current_user.site_admin?
       link_to gift_mark_as_unpurchased_path(gift),
               method: :patch, class: 'btn btn-sm btn-outline-success' do
-        icon + text
+        icon + text_node
       end
     else
-      content_tag(:span, icon + text, class: 'text-success text-nowrap')
+      content_tag(:span, icon + text_node, class: 'text-success text-nowrap purchased-static')
     end
   end
 

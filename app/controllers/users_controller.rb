@@ -52,6 +52,12 @@ class UsersController < ApplicationController
     end
   end
 
+  def clear_purchased_gifts
+    @user = User.find(params[:user_id])
+    @user.gifts.where(purchased: true).destroy_all
+    redirect_to :back
+  end
+
   private
 
   def safe_params

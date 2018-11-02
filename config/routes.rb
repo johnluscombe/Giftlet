@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :users, only: [:index, :create], shallow: true do
     resources :gifts, only: [:index, :create, :update, :destroy]
+    delete 'clear_purchased_gifts'
   end
 
   resources :gifts, only: [:index, :create, :update, :destroy] do

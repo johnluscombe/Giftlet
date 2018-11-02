@@ -3,10 +3,14 @@
     %i.fa.fa-chevron-left
     Users
 
-- if current_user?(@user)
-  %h1 Your Gifts
-- else
-  %h1 #{@user.first_name}'s Gifts
+.gift-header
+  - if current_user?(@user)
+    %h1.d-inline Your Gifts
+  - else
+    %h1.d-inline #{@user.first_name}'s Gifts
+  - if current_user.site_admin?
+    = clear_purchased_gifts_button
+
 
 %br
 - if params[:render_new] and can_edit_gift?
