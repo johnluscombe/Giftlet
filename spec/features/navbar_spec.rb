@@ -3,7 +3,7 @@ require_relative '../support/environment'
 require_relative '../support/login'
 
 describe 'Navbar' do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
 
   subject { page }
 

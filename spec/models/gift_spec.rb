@@ -2,7 +2,7 @@ require_relative '../rails_helper'
 require_relative '../support/login'
 
 describe Gift do
-  let(:gift) { FactoryGirl.create(:gift) }
+  let(:gift) { FactoryBot.create(:gift) }
 
   subject { gift }
 
@@ -52,7 +52,7 @@ describe Gift do
   end
 
   describe 'with zero price' do
-    let(:free_gift) { FactoryGirl.create(:free_gift) }
+    let(:free_gift) { FactoryBot.create(:free_gift) }
 
     it 'converts price to nil' do
       expect(free_gift.price).to be(nil)

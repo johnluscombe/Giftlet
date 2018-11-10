@@ -2,8 +2,8 @@ require_relative '../rails_helper'
 require_relative '../support/login'
 
 describe LoginsHelper do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:other_user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:other_user) { FactoryBot.create(:user) }
 
   describe 'not logged in' do
     it 'expects current_user to be nil' do

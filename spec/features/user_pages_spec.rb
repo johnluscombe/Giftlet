@@ -3,12 +3,12 @@ require_relative '../support/environment'
 require_relative '../support/login'
 
 describe 'User Pages' do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
 
   subject { page }
 
   describe 'viewing list of recipients' do
-    before { 10.times { FactoryGirl.create(:user) } }
+    before { 10.times { FactoryBot.create(:user) } }
 
     it 'has 10 recipients' do
       expect(User.count).to eq(10)
@@ -119,7 +119,7 @@ describe 'User Pages' do
     end
 
     describe 'with duplicate username' do
-      let(:new_user) { FactoryGirl.create(:user) }
+      let(:new_user) { FactoryBot.create(:user) }
 
       before do
         fill_in 'user_first_name', with: 'First'
@@ -315,7 +315,7 @@ describe 'User Pages' do
       end
 
       describe 'with duplicate username' do
-        let(:new_user) { FactoryGirl.create(:user) }
+        let(:new_user) { FactoryBot.create(:user) }
 
         before { fill_in 'user_username', with: new_user.username }
 

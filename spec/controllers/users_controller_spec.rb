@@ -4,7 +4,7 @@ require_relative '../support/login'
 require_relative '../support/other'
 
 describe UsersController do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
 
   subject { response }
 
@@ -132,7 +132,7 @@ describe UsersController do
   end
 
   describe 'PATCH #update_basic_information' do
-    let!(:new_user) { FactoryGirl.create(:user) }
+    let!(:new_user) { FactoryBot.create(:user) }
 
     describe 'user not logged in' do
       it 'does not update user' do
@@ -177,7 +177,7 @@ describe UsersController do
   end
 
   describe 'PATCH #update_password' do
-    let!(:new_user) { FactoryGirl.create(:user) }
+    let!(:new_user) { FactoryBot.create(:user) }
 
     describe 'user not logged in' do
       it 'does not update user' do

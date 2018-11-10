@@ -2,7 +2,7 @@ require_relative '../rails_helper'
 require_relative '../support/login'
 
 describe LoginsController do
-  let!(:user) { FactoryGirl.create(:user) }
+  let!(:user) { FactoryBot.create(:user) }
 
   subject { response }
 
