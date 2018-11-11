@@ -3,6 +3,13 @@ module GiftsHelper
     current_user?(@user) or current_user.site_admin?
   end
 
+  def can_clear_purchased_for(gifts_user)
+    is_site_admin = current_user.site_admin?
+    not_gifts_user = current_user != gifts_user
+    purchased_to_clear = gifts_user.gifts.purchased.count > 0
+    is_site_admin and not_gifts_user and purchased_to_clear
+  end
+
   def editing(gift)
     can_edit_gift? and params[:render_edit].to_i == gift.id
   end

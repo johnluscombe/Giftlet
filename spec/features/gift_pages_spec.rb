@@ -1026,4 +1026,105 @@ describe 'Gift Pages' do
       should have_current_path(user_gifts_path(user))
     end
   end
+
+  describe 'clearing purchased' do
+    describe 'when there are no purchased gifts to clear' do
+      before do
+        FactoryBot.create(:gift, user: user)
+        FactoryBot.create(:gift, user: second_user)
+      end
+
+      describe 'as non-admin' do
+        before { login user }
+
+        describe 'for own gifts' do
+          before { visit user_gifts_path(user) }
+
+          it 'should not have "clear purchased" button' do
+            should_not have_content('Clear Purchased')
+          end
+        end
+
+        describe "for other user's gifts" do
+          before { visit user_gifts_path(second_user) }
+
+          it 'should not have "clear purchased" button' do
+            should_not have_content('Clear Purchased')
+          end
+        end
+      end
+
+      describe 'as admin' do
+        before { login admin }
+
+        describe 'for own gifts' do
+          before { visit user_gifts_path(admin) }
+
+          it 'should not have "clear purchased" button' do
+            should_not have_content('Clear Purchased')
+          end
+        end
+
+        describe "for other user's gifts" do
+          before { visit user_gifts_path(user) }
+
+          it 'should not have "clear purchased" button' do
+            should_not have_content('Clear Purchased')
+          end
+        end
+      end
+    end
+
+    describe 'when there are purchased gifts to clear' do
+      before do
+        2.times { FactoryBot.create(:gift, user: user, purchased: true) }
+        2.times { FactoryBot.create(:gift, user: user) }
+        FactoryBot.create(:gift, user: second_user)
+      end
+
+      describe 'as non-admin' do
+        before { login user }
+
+        describe 'for own gifts' do
+          before { visit user_gifts_path(user) }
+
+          it 'should not have "clear purchased" button' do
+            should_not have_content('Clear Purchased')
+          end
+        end
+
+        describe "for other user's gifts" do
+          before { visit user_gifts_path(second_user) }
+
+          it 'should not have "clear purchased" button' do
+            should_not have_content('Clear Purchased')
+          end
+        end
+      end
+
+      describe 'as admin' do
+        before { login admin }
+
+        describe 'for own gifts' do
+          before { visit user_gifts_path(admin) }
+
+          it 'should not have "clear purchased" button' do
+            should_not have_content('Clear Purchased')
+          end
+        end
+
+        describe "for other user's gifts" do
+          before { visit user_gifts_path(user) }
+
+          it 'should have "clear purchased" button' do
+            should have_content('Clear Purchased')
+          end
+
+          it 'removes the gifts from the system' do
+            expect { click_link 'Clear Purchased' }.to change(Gift, :count).by(-2)
+          end
+        end
+      end
+    end
+  end
 end

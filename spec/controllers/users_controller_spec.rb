@@ -226,4 +226,57 @@ describe UsersController do
       end
     end
   end
+
+  describe 'DELETE #clear_purchased_gifts' do
+    let(:second_user) { FactoryBot.create(:user) }
+    let(:admin) { FactoryBot.create(:admin_user) }
+
+    before do
+      2.times { FactoryBot.create(:gift, user: second_user, purchased: true) }
+      2.times { FactoryBot.create(:gift, user: second_user) }
+      2.times { FactoryBot.create(:gift, user: admin, purchased: true) }
+      2.times { FactoryBot.create(:gift, user: user) }
+      set_http_referer(users_path)
+    end
+
+    describe 'when not site-admin' do
+      before { direct_login(user) }
+
+      it 'does not clear any gifts' do
+        expect {
+          delete :clear_purchased_gifts, user_id: second_user
+        }.not_to change(Gift, :count)
+      end
+    end
+
+    describe 'when viewing own gifts' do
+      before { direct_login(admin) }
+
+      it 'does not clear any gifts' do
+        expect {
+          delete :clear_purchased_gifts, user_id: admin
+        }.not_to change(Gift, :count)
+      end
+    end
+
+    describe 'when there are no purchased gifts to clear' do
+      before { direct_login(admin) }
+
+      it 'does not clear any gifts' do
+        expect {
+          delete :clear_purchased_gifts, user_id: user
+        }.not_to change(Gift, :count)
+      end
+    end
+
+    describe 'when site admin, not viewing own gifts, and there are purchased gifts to clear' do
+      before { direct_login(admin) }
+
+      it 'clears purchased gifts' do
+        expect {
+          delete :clear_purchased_gifts, user_id: second_user
+        }.to change(Gift, :count).by(-2)
+      end
+    end
+  end
 end

@@ -8,7 +8,7 @@
     %h1.d-inline Your Gifts
   - else
     %h1.d-inline #{@user.first_name}'s Gifts
-  - if current_user.site_admin?
+  - if can_clear_purchased_for(@user)
     = clear_purchased_gifts_button
 
 
