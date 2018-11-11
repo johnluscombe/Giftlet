@@ -1078,6 +1078,7 @@ describe 'Gift Pages' do
     describe 'when there are purchased gifts to clear' do
       before do
         2.times { FactoryBot.create(:gift, user: user, purchased: true) }
+        2.times { FactoryBot.create(:gift, user: user, purchased: true, purchaser_id: admin.id) }
         2.times { FactoryBot.create(:gift, user: user) }
         FactoryBot.create(:gift, user: second_user)
       end
@@ -1121,7 +1122,7 @@ describe 'Gift Pages' do
           end
 
           it 'removes the gifts from the system' do
-            expect { click_link 'Clear Purchased' }.to change(Gift, :count).by(-2)
+            expect { click_link 'Clear Purchased' }.to change(Gift, :count).by(-4)
           end
         end
       end

@@ -233,6 +233,7 @@ describe UsersController do
 
     before do
       2.times { FactoryBot.create(:gift, user: second_user, purchased: true) }
+      2.times { FactoryBot.create(:gift, user: second_user, purchased: true, purchaser_id: admin.id) }
       2.times { FactoryBot.create(:gift, user: second_user) }
       2.times { FactoryBot.create(:gift, user: admin, purchased: true) }
       2.times { FactoryBot.create(:gift, user: user) }
@@ -275,7 +276,7 @@ describe UsersController do
       it 'clears purchased gifts' do
         expect {
           delete :clear_purchased_gifts, user_id: second_user
-        }.to change(Gift, :count).by(-2)
+        }.to change(Gift, :count).by(-4)
       end
     end
   end
