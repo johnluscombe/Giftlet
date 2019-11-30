@@ -12,7 +12,9 @@
 
     .main
       - if @hide_sidebar
-        = render 'layouts/content'
+        .content
+          .container-fluid
+            = render 'layouts/content'
       - else
         - if @show_mobile_sidebar
           .sidebar

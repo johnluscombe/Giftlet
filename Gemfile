@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-ruby '2.5.1'
-gem 'rails', '4.2.10'
+ruby '2.6.5'
+gem 'rails', '4.2.11.1'
 
 group :development do
   gem 'pry-rails'
@@ -14,7 +14,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3.6'
   gem 'rspec-rails'
 end
 

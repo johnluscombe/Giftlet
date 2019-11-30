@@ -1,5 +1,0 @@
-- if object.errors.any?
-  - error_message = ''
-  - object.errors.full_messages.each do |message|
-    - error_message += message + "\n"
-  - flash.now[:danger] = error_message
