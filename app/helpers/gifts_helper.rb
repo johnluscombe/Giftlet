@@ -6,7 +6,7 @@ module GiftsHelper
   def can_clear_purchased_for(gifts_user)
     is_site_admin = current_user.site_admin?
     not_gifts_user = current_user != gifts_user
-    purchased_to_clear = gifts_user.gifts.purchased.count > 0
+    purchased_to_clear = gifts_user.gifts.where.not(purchaser_id: nil).count > 0
     is_site_admin and not_gifts_user and purchased_to_clear
   end
 
@@ -128,14 +128,7 @@ module GiftsHelper
     text_node = content_tag(:span, text, class: 'hidden-xs-down')
     icon = content_tag(:i, nil, class: 'fa fa-check')
 
-    if current_user.site_admin?
-      link_to gift_mark_as_unpurchased_path(gift),
-              method: :patch, class: 'btn btn-sm btn-outline-success' do
-        icon + text_node
-      end
-    else
-      content_tag(:span, icon + text_node, class: 'text-success text-nowrap purchased-static')
-    end
+    content_tag(:span, icon + text_node, class: 'text-success text-nowrap purchased-static')
   end
 
   def purchased_by_nil

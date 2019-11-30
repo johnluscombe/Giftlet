@@ -36,14 +36,14 @@ class GiftsController < ApplicationController
   def mark_as_purchased
     @gift = Gift.find(params[:gift_id])
     @user = @gift.user
-    @gift.update(purchased: true, purchaser_id: current_user.id)
+    @gift.update(purchaser_id: current_user.id)
     redirect_to user_gifts_path(@user)
   end
 
   def mark_as_unpurchased
     @gift = Gift.find(params[:gift_id])
     @user = @gift.user
-    @gift.update(purchased: false, purchaser_id: nil)
+    @gift.update(purchaser_id: nil)
     redirect_to user_gifts_path(@user)
   end
 
@@ -57,7 +57,7 @@ class GiftsController < ApplicationController
   private
 
   def safe_params
-    params.require(:gift).permit(:name, :description, :url, :price_as_dollars, :purchased, :date_purchased, :purchaser_id)
+    params.require(:gift).permit(:name, :description, :url, :price_as_dollars, :purchaser_id)
   end
 
   def ensure_user_logged_in
@@ -84,7 +84,7 @@ class GiftsController < ApplicationController
     @gift = Gift.find(params[:gift_id])
     @user = @gift.user
 
-    if @gift.purchased
+    unless @gift.purchaser_id.nil?
       redirect_to user_gifts_path(@user)
     end
   end

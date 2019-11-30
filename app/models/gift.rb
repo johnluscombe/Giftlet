@@ -8,7 +8,7 @@ class Gift < ActiveRecord::Base
 
   before_save :change_zero_price_to_nil
 
-  scope :purchased, -> { where(purchased: true) }
+  scope :purchased, -> { where.not(purchaser_id: nil) }
 
   def full_url
     if self.url[0..6] == 'http://' or self.url[0..7] == 'https://'

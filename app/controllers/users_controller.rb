@@ -56,7 +56,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:user_id])
 
     if can_clear_purchased_for(@user)
-      @user.gifts.where(purchased: true).destroy_all
+      @user.gifts.where.not(purchaser_id: nil).destroy_all
     end
 
     redirect_to :back
@@ -105,7 +105,7 @@ class UsersController < ApplicationController
   def can_clear_purchased_for(gifts_user)
     is_site_admin = current_user.site_admin?
     not_gifts_user = current_user != gifts_user
-    purchased_to_clear = gifts_user.gifts.purchased.count > 0
+    purchased_to_clear = gifts_user.gifts.where.not(purchaser_id: nil).count > 0
     is_site_admin and not_gifts_user and purchased_to_clear
   end
 end

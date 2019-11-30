@@ -11,15 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181102000645) do
+ActiveRecord::Schema.define(version: 20191130035129) do
 
   create_table "gifts", force: :cascade do |t|
     t.string  "name"
     t.string  "description"
     t.string  "url"
     t.float   "price"
-    t.boolean "purchased"
-    t.date    "date_purchased"
     t.integer "user_id"
     t.integer "purchaser_id"
   end

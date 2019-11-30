@@ -9,7 +9,7 @@
         = gift_price(gift)
 
         - if @user != current_user
-          - if gift.purchased
+          - if gift.purchaser_id
             = purchased_by(gift)
           - else
             = mark_as_purchased(gift)
