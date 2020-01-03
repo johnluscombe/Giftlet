@@ -3,17 +3,22 @@ class UsersController < ApplicationController
   before_filter :ensure_user_not_logged_in, only: :create
 
   def index
-    @show_mobile_sidebar = true
+    if current_user.can_view_family_gifts?(@family)
+      @show_sidebar = true
+      @show_mobile_sidebar = true
+    else
+      redirect_to families_path
+    end
   end
 
   def create
-    @user = User.new(safe_params)
+    user = User.new(safe_params)
 
     if ENV['ENABLE_SIGN_UP']
-      if @user.save
+      if user.save
         flash[:success] = 'Account created'
       else
-        display_error(@user)
+        display_error(user)
       end
     else
       flash[:danger] = 'Creating accounts has been disabled. Please contact your administrator.'
@@ -53,10 +58,10 @@ class UsersController < ApplicationController
   end
 
   def clear_purchased_gifts
-    @user = User.find(params[:user_id])
+    user = User.find(params[:user_id])
 
-    if can_clear_purchased_for(@user)
-      @user.gifts.where.not(purchaser_id: nil).destroy_all
+    if current_user.can_clear_purchased_for?(user)
+      user.gifts.where.not(purchaser_id: nil).destroy_all
     end
 
     redirect_to :back
@@ -77,7 +82,7 @@ class UsersController < ApplicationController
 
   def ensure_user_not_logged_in
     if current_user
-      redirect_to users_path
+      redirect_to families_path
     end
   end
 
@@ -100,12 +105,5 @@ class UsersController < ApplicationController
 
       flash[:danger] = error_message
     end
-  end
-
-  def can_clear_purchased_for(gifts_user)
-    is_site_admin = current_user.site_admin?
-    not_gifts_user = current_user != gifts_user
-    purchased_to_clear = gifts_user.gifts.where.not(purchaser_id: nil).count > 0
-    is_site_admin and not_gifts_user and purchased_to_clear
   end
 end

@@ -1,28 +1,24 @@
 .sidebar {
   padding: 15px;
 
-  a {
-    color: black;
+  .family-name {
+    margin-bottom: 16px;
+  }
 
-    &:hover {
-      color: black;
-      text-decoration: none;
+  .user-card {
+    color: black;
+    padding: 10px;
+
+    .user-picture {
+      border-radius: 20px;
+      height: 40px;
+      width: 40px;
     }
 
-    .user-card {
-      padding: 10px;
-
-      .user-picture {
-        border-radius: 20px;
-        height: 40px;
-        width: 40px;
-      }
-
-      .user-name {
-        display: inline-block;
-        margin-left: 5px;
-        vertical-align: middle;
-      }
+    .user-name {
+      display: inline-block;
+      margin-left: 5px;
+      vertical-align: middle;
     }
   }
 }

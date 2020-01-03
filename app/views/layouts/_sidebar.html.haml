@@ -1,4 +1,13 @@
 .sidebar-background
-= render partial: 'layouts/sidebar_user', locals: { user: current_user }
-%hr
-= render partial: 'layouts/sidebar_user', collection: @sidebar_users, as: :user
+.back-link
+  = link_to families_path do
+    %i.fa.fa-chevron-left
+    Families
+%h3.text-truncate.family-name= @family.name
+- if current_user.part_of_family?(@family)
+  = render partial: 'layouts/sidebar_user', locals: { user: current_user }
+  %hr
+- if @sidebar_users.count > 0
+  = render partial: 'layouts/sidebar_user', collection: @sidebar_users, as: :user
+- else
+  %i No family members

@@ -1,12 +1,20 @@
 Rails.application.routes.draw do
   root 'logins#new'
 
-  resources :users, only: [:index, :create], shallow: true do
-    resources :gifts, only: [:index, :create, :update, :destroy]
+  resources :families, only: :index do
+    resources :users, only: :index do
+      resources :gifts, only: :index
+    end
+  end
+
+  resources :users, only: :create do
+    resources :gifts, only: :create
     delete 'clear_purchased_gifts'
   end
 
-  resources :gifts, only: [:index, :create, :update, :destroy] do
+  resources :gifts, only: [:update, :destroy], param: :gift_id
+
+  resources :gifts, only: [] do
     patch 'mark_as_purchased'
     patch 'mark_as_unpurchased'
   end

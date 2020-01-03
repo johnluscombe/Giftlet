@@ -1,17 +1,10 @@
 module GiftsHelper
-  def can_edit_gift?
-    current_user?(@user) or current_user.site_admin?
-  end
-
-  def can_clear_purchased_for(gifts_user)
-    is_site_admin = current_user.site_admin?
-    not_gifts_user = current_user != gifts_user
-    purchased_to_clear = gifts_user.gifts.where.not(purchaser_id: nil).count > 0
-    is_site_admin and not_gifts_user and purchased_to_clear
-  end
-
   def editing(gift)
-    can_edit_gift? and params[:render_edit].to_i == gift.id
+    can_edit_user_gifts?(gift.user) and params[:render_edit].to_i == gift.id
+  end
+  
+  def can_edit_user_gifts?(user)
+    current_user?(user) or current_user.can_edit_family_gifts?(@family)
   end
 
   def purchased_by(gift)
@@ -25,7 +18,7 @@ module GiftsHelper
   end
 
   def mark_as_purchased(gift)
-    link_to(gift_mark_as_purchased_path(gift),
+    link_to(gift_mark_as_purchased_path(gift, family_id: @family.id),
             method: :patch, class: 'btn btn-sm btn-secondary') do
 
       content_tag(:i, nil, class: 'fa fa-check')
@@ -57,7 +50,7 @@ module GiftsHelper
   end
 
   def gift_edit(gift)
-    link_to user_gifts_path(@user, render_edit: gift.id), class: 'btn btn-sm btn-secondary' do
+    link_to family_user_gifts_path(@family, @user, render_edit: gift.id), class: 'btn btn-sm btn-secondary' do
       content_tag(:i, nil, class: 'fa fa-pencil', 'aria-hidden': 'true')
     end
   end
@@ -65,13 +58,13 @@ module GiftsHelper
   def gift_delete(gift)
     confirm_text = 'Are you sure you want to delete this gift?'
 
-    link_to gift_path(gift), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: confirm_text } do
+    link_to gift_path(gift, family_id: @family.id), method: :delete, class: 'btn btn-sm btn-secondary', data: { confirm: confirm_text } do
       content_tag(:i, nil, class: 'fa fa-trash', 'aria-hidden': 'true')
     end
   end
 
   def add_gift_button
-    link_to user_gifts_path(@user, render_new: true), class: 'btn btn-outline-success btn-block' do
+    link_to family_user_gifts_path(@family, @user, render_new: true), class: 'btn btn-outline-success btn-block' do
       content_tag(:i, nil, class: 'fa fa-plus') + 'ADD GIFT'
     end
   end
@@ -108,7 +101,7 @@ module GiftsHelper
   end
 
   def gift_cancel_button
-    link_to user_gifts_path(@user), class: 'btn btn-secondary btn-sm gift-cancel' do
+    link_to family_user_gifts_path(@family, @user), class: 'btn btn-secondary btn-sm gift-cancel' do
       content_tag(:i, nil, class: 'fa fa-times')
     end
   end
@@ -116,7 +109,7 @@ module GiftsHelper
   private
 
   def purchased_by_you(gift)
-    link_to gift_mark_as_unpurchased_path(gift),
+    link_to gift_mark_as_unpurchased_path(gift, family_id: @family.id),
             method: :patch, class: 'btn btn-sm btn-success' do
 
       content_tag(:i, nil, class: 'fa fa-check')

@@ -1,5 +1,5 @@
-.hidden-md-up.users-back
-  = link_to users_path do
+.hidden-md-up.back-link
+  = link_to family_users_path(@family) do
     %i.fa.fa-chevron-left
     Users
 
@@ -8,16 +8,15 @@
     %h1.d-inline Your Gifts
   - else
     %h1.d-inline #{@user.first_name}'s Gifts
-  - if can_clear_purchased_for(@user)
+  - if current_user.can_clear_purchased_for?(@user)
     = clear_purchased_gifts_button
 
-
 %br
-- if params[:render_new] and can_edit_gift?
+- if params[:render_new] and can_edit_user_gifts?(@user)
   = form_for [@user, @gift] do |form|
     = render partial: 'gift', collection: @gifts, locals: { f: form }
     #new-gift= render partial: 'fields', locals: { f: form }
-- elsif params[:render_edit] and can_edit_gift?
+- elsif params[:render_edit] and can_edit_user_gifts?(@user)
   = form_for @gift do |form|
     = render partial: 'gift', collection: @gifts, locals: { f: form }
 - else
@@ -28,5 +27,5 @@
   - else
     %p #{@user.first_name} has not added any gifts yet!
 
-  - if can_edit_gift?
+  - if can_edit_user_gifts?(@user)
     = add_gift_button

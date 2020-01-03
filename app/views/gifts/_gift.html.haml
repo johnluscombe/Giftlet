@@ -13,7 +13,7 @@
             = purchased_by(gift)
           - else
             = mark_as_purchased(gift)
-        - if can_edit_gift?
+        - if can_edit_user_gifts?(@user)
           = gift_edit(gift)
           = gift_delete(gift)
 

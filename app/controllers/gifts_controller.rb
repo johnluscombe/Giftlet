@@ -1,12 +1,11 @@
 class GiftsController < ApplicationController
+  include GiftsHelper
+  
   before_filter :ensure_user_logged_in
-  before_filter :ensure_correct_user, except: [:index, :mark_as_purchased, :mark_as_unpurchased]
-  before_filter :ensure_can_mark_as_purchased, only: :mark_as_purchased
-  before_filter :ensure_can_mark_as_unpurchased, only: :mark_as_unpurchased
 
   def index
-    if params[:user_id]
-      @user = User.find(params[:user_id])
+    @show_sidebar = true
+    if current_user.can_view_family_gifts?(@family)
       @gifts = @user.gifts.order(:name)
       if params[:render_new]
         @gift = @user.gifts.build
@@ -14,44 +13,56 @@ class GiftsController < ApplicationController
         @gift = Gift.find(params[:render_edit])
       end
     else
-      user = User.where.not(id: current_user.id).first
-      redirect_to user_gifts_path(user)
+      redirect_to families_path
     end
   end
 
   def create
-    @user = User.find(params[:user_id])
-    @gift = @user.gifts.build(safe_params)
-    @gift.save
-    redirect_to :back
+    gift = @user.gifts.build(safe_params)
+
+    if can_edit_user_gifts?(@user)
+      gift.save
+    end
+
+    redirect_to_user_gifts(@user)
   end
 
   def update
-    @gift = Gift.find(params[:id])
-    @user = @gift.user
-    @gift.update(safe_params)
-    redirect_to user_gifts_path(@user)
+    user = @gift.user
+    
+    if can_edit_user_gifts?(user)
+      @gift.update(safe_params)
+    end
+    
+    redirect_to_user_gifts(user)
   end
 
   def mark_as_purchased
-    @gift = Gift.find(params[:gift_id])
-    @user = @gift.user
-    @gift.update(purchaser_id: current_user.id)
-    redirect_to user_gifts_path(@user)
+    if @gift.purchaser_id.nil?
+      @gift.update(purchaser_id: current_user.id)
+    end
+
+    redirect_to_user_gifts(@gift.user)
   end
 
   def mark_as_unpurchased
-    @gift = Gift.find(params[:gift_id])
-    @user = @gift.user
-    @gift.update(purchaser_id: nil)
-    redirect_to user_gifts_path(@user)
+    purchaser = User.find(@gift.purchaser_id)
+
+    if can_edit_user_gifts?(purchaser)
+      @gift.update(purchaser_id: nil)
+    end
+
+    redirect_to_user_gifts(@gift.user)
   end
 
   def destroy
-    @gift = Gift.find(params[:id])
-    @user = @gift.user
-    @gift.destroy
-    redirect_to user_gifts_path(@user)
+    user = @gift.user
+
+    if can_edit_user_gifts?(user)
+      @gift.destroy
+    end
+
+    redirect_to_user_gifts(user)
   end
 
   private
@@ -67,41 +78,15 @@ class GiftsController < ApplicationController
     end
   end
 
-  def ensure_correct_user
-    if params[:user_id]
-      @user = User.find(params[:user_id])
+  def redirect_to_user_gifts(user)
+    if @family
+      if user
+        redirect_to family_user_gifts_path(@family, user)
+      else
+        redirect_to family_users_path(@family)
+      end
     else
-      @gift = Gift.find(params[:id])
-      @user = @gift.user
+      redirect_to families_path
     end
-
-    unless can_edit_gift?(@user)
-      redirect_to users_path
-    end
-  end
-
-  def ensure_can_mark_as_purchased
-    @gift = Gift.find(params[:gift_id])
-    @user = @gift.user
-
-    unless @gift.purchaser_id.nil?
-      redirect_to user_gifts_path(@user)
-    end
-  end
-
-  def ensure_can_mark_as_unpurchased
-    @gift = Gift.find(params[:gift_id])
-    @recipient = @gift.user
-    @purchaser = User.find(@gift.purchaser_id)
-
-    unless can_edit_gift?(@purchaser)
-      redirect_to user_gifts_path(@recipient)
-    end
-  end
-
-  private
-
-  def can_edit_gift?(user)
-    current_user?(user) or current_user.site_admin?
   end
 end

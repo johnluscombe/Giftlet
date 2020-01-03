@@ -11,11 +11,7 @@
     = render 'layouts/navbar'
 
     .main
-      - if @hide_sidebar
-        .content
-          .container-fluid
-            = render 'layouts/content'
-      - else
+      - if @show_sidebar
         - if @show_mobile_sidebar
           .sidebar
             = render 'layouts/sidebar'
@@ -25,4 +21,8 @@
           .sidebar.hidden-sm-down
             = render 'layouts/sidebar'
           .content
+            = render 'layouts/content'
+      - else
+        .content
+          .container-fluid
             = render 'layouts/content'

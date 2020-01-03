@@ -32,6 +32,10 @@ class Gift < ActiveRecord::Base
     self.save
   end
 
+  def purchased
+    self.purchaser_id != nil
+  end
+
   def purchaser
     User.find(self.purchaser_id)
   end
