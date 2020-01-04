@@ -24,7 +24,7 @@ group :production do
 end
 
 gem 'sass-rails', '~> 5.0'
-gem 'bootstrap', '4.0.0.alpha5'
+gem 'bootstrap', '4.3.1'
 gem 'tether-rails'
 gem 'font-awesome-sass', '~> 4.7.0'
 
