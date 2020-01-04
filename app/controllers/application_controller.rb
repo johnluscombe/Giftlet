@@ -16,7 +16,8 @@ class ApplicationController < ActionController::Base
   def get_users
     @sidebar_users = []
     if current_user and @family
-      @sidebar_users = @family.users.where.not(id: current_user.id)
+      @sidebar_users = @family.users.where.not(
+        id: current_user.id).order(:last_name, :first_name)
     end
   end
 end

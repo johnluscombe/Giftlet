@@ -153,6 +153,10 @@ body {
 }
 
 @media (max-width: 767px) {
+  .container-fluid {
+    padding: 0;
+  }
+  
   .sidebar, .sidebar-background {
     width: 100%;
   }
